@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title
+  th:text="@{'Registration - ' + ${@customSiteProperties.siteName}}"
+></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style>
+.form-error {
+	color: red;
+}
+</style>
+</head>
+<body>
+  <h2>Welcome to Track My Water Change</h2>
+  <h4>Please register below</h4>
+
+  <br>
+  <br>
+
+  <!-- Username -->
+  <form th:action="@{/user/register}" method="post"
+    th:object="${newUser}"
+  >
+
+    <span class="form-error" th:if="${registrationError != null}"
+      th:text="${registrationError}"
+    >Username gone!</span>
+    <table>
+      <!-- Username -->
+      <tr>
+        <td>
+          <label>Username(*) </label>
+        </td>
+        <td>
+          <input type="text" value="Username" id="username"
+            th:field="*{username}" placeholder="Username"
+          /> <span class="form-error"
+            th:if="${#fields.hasErrors('username')}"
+            th:errors="*{username}"
+          >Incorrect Username</span>
+        </td>
+      </tr>
+      <tr></tr>
+      <!-- First Name -->
+      <tr>
+        <td>
+          <label>First Name(*) </label>
+        </td>
+        <td>
+          <input type="text" value="JimBob" id="firstName"
+            th:field="*{firstName}" placeholder="JimBob"
+          /> <span class="form-error"
+            th:if="${#fields.hasErrors('firstName')}"
+            th:errors="*{firstName}"
+          >Incorrect Name</span>
+        </td>
+      <tr></tr>
+
+      <!-- Last Name -->
+      <tr>
+        <td>
+          <label>Last Name(*) </label>
+        </td>
+        <td>
+          <input type="text" value="Lastname" id="lastName"
+            th:field="*{lastName}" placeholder="Lastname"
+          /> <span class="form-error"
+            th:if="${#fields.hasErrors('lastName')}"
+            th:errors="*{lastName}"
+          >Incorrect Name</span>
+        </td>
+      </tr>
+
+      <tr></tr>
+
+      <!-- Email (Optional) -->
+      <tr>
+        <td>
+          <label>Email </label>
+        </td>
+        <td>
+          <input type="text" value="email" id="email"
+            th:field="*{email}" placeholder="email@domain.com"
+          /> <span class="form-error"
+            th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+          >Incorrect Name</span>
+        </td>
+      </tr>
+    </table>
+    <br>
+    <button type="submit" name="submitForm" value="0">Submit</button>
+  </form>
+  <br>
+  <p>
+    <a href="/">Return home</a>
+  </p>
+</body>
+</html>

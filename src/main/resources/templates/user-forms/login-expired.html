@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title th:text="@{'Login - ' + ${@customSiteProperties.siteName}}"></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style>
+.form-error {
+  color: red;
+}
+</style>
+</head>
+<body>
+  <h2>Please Login Below</h2>
+  <form th:action="@{/user/login}" method="POST" th:object="${user}">
+    <table>
+
+
+      <!-- Get username -->
+      <tr>
+        <td>
+          <label>Username</label>
+        </td>
+        <td>
+          <input type="text" value="Username" id="username"
+            th:field="*{username}" placeholder="MY USERNAME"
+          />
+        </td>
+        <td th:if="${loginError != null}">
+          <!-- Username not found -->
+          <label th:text="${loginError}" class="form-error">Username
+            not found</label>
+        </td>
+      </tr>
+    </table>
+    <button type="submit" name="submitForm">Submit</button>
+  </form>
+  <p>
+    Not registered? <a href="/user/register">Click here</a>
+  </p>
+  <br>
+  <p>
+    <a href="/">Return home</a>
+  </p>
+</body>
+</html>

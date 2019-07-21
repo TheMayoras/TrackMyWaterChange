@@ -1,0 +1,110 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title th:text="@{'Login - ' + ${@customSiteProperties.siteName}}"></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style>
+.form-error {
+	color: red;
+}
+
+.empty-table-alert {
+	color: red;
+	font-size: 20px;
+	text-align: center;
+}
+
+.empty-table-alert-fill:after {
+	content:
+		"--------------------------------------------------------------------------------------";
+	color: red;
+	white-space: nowrap;
+	max-width: 25%;
+	overflow: hidden;
+}
+
+.tank-table-row {
+	width: 100px;
+}
+
+.tank-align-center {
+	text-align: center;
+}
+
+.tank-row td {
+	white-space: nowrap;
+}
+
+#water-change-col {
+	width: 200px;
+}
+
+#add-tank-button {
+	
+}
+</style>
+</head>
+
+<body>
+  <div id="welcome">
+    <h2 th:text="'Welcome, ' + ${user?.firstName}">Hello</h2>
+  </div>
+
+  <div id="tank-table">
+    <table>
+      <thead>
+        <tr>
+          <th class="tank-table-row">Name</th>
+          <th class="tank-table-row">Size</th>
+          <th class="tank-table-row">Location</th>
+          <th class="tank-table-row" id="water-change-col">Number
+            of Water Changes</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- Add Tank Button -->
+        <tr>
+          <td id="blank-col" colspan=4>
+          <td colspan=1 id="add-tank-row">
+            <form th:action="@{/home/add-tank}" method="GET">
+              <button type="submit">Add Tank</button>
+              <input type="hidden" th:field="${user.id}"
+                th:value="${user.id}"
+              />
+            </form>
+          </td>
+        </tr>
+
+
+        <!-- Row to display if no tanks available -->
+        <tr th:if="${user.tanks == null || user.tanks.size() == 0}">
+          <!-- ||  -->
+          <td colspan="1" class="empty-table-alert-fill"></td>
+          <td colspan="2" class="empty-table-alert">No Tanks</td>
+          <td colspan="1" class="empty-table-alert-fill"></td>
+        </tr>
+
+        <!-- List Tanks -->
+        <tr th:each="tank : ${user?.tanks}" class="tank-row">
+          <td th:text="${tank.name}"></td>
+          <td th:text="${tank.size}" class="tank-align-center"></td>
+          <td th:text="${tank.location}"></td>
+          <td
+            th:text="${tank.waterChanges == null ? 0 : tank.waterChanges.size()}"
+            class="tank-align-center"
+          ></td>
+          <td>
+            <form th:object="${user}" th:action="@{/tank}" method="GET">
+              <button type="submit" th:value="${tank.id}"
+                name="waterChangeId"
+              >See Water Changes for Tank</button>
+            </form>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
