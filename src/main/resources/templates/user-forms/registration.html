@@ -8,6 +8,7 @@
 <style>
 .form-error {
 	color: red;
+    style:italic;
 }
 </style>
 </head>
@@ -27,66 +28,84 @@
       th:text="${registrationError}"
     >Username gone!</span>
     <table>
+          <!-- Password Match Errors -->
+      <tr>
+        <td colspan="2"><p class="form-error"
+            th:if="${#fields.hasErrors('*')}" th:errors="${newUser}"
+          ></p></td>
+      </tr>
+      
       <!-- Username -->
       <tr>
-        <td>
-          <label>Username(*) </label>
-        </td>
-        <td>
-          <input type="text" value="Username" id="username"
-            th:field="*{username}" placeholder="Username"
-          /> <span class="form-error"
-            th:if="${#fields.hasErrors('username')}"
-            th:errors="*{username}"
-          >Incorrect Username</span>
-        </td>
+        <td><label>Username(*) </label></td>
+        <td><input type="text" value="Username" id="username"
+          th:field="*{username}" placeholder="Username"
+        /> <span class="form-error"
+          th:if="${#fields.hasErrors('username')}"
+          th:errors="*{username}"
+        >Incorrect Username</span></td>
       </tr>
       <tr></tr>
       <!-- First Name -->
       <tr>
-        <td>
-          <label>First Name(*) </label>
-        </td>
-        <td>
-          <input type="text" value="JimBob" id="firstName"
-            th:field="*{firstName}" placeholder="JimBob"
-          /> <span class="form-error"
-            th:if="${#fields.hasErrors('firstName')}"
-            th:errors="*{firstName}"
-          >Incorrect Name</span>
-        </td>
+        <td><label>First Name(*) </label></td>
+        <td><input type="text" value="JimBob" id="firstName"
+          th:field="*{firstName}" placeholder="JimBob"
+        /> <span class="form-error"
+          th:if="${#fields.hasErrors('firstName')}"
+          th:errors="*{firstName}"
+        >Incorrect Name</span></td>
       <tr></tr>
 
       <!-- Last Name -->
       <tr>
-        <td>
-          <label>Last Name(*) </label>
-        </td>
-        <td>
-          <input type="text" value="Lastname" id="lastName"
-            th:field="*{lastName}" placeholder="Lastname"
-          /> <span class="form-error"
-            th:if="${#fields.hasErrors('lastName')}"
-            th:errors="*{lastName}"
-          >Incorrect Name</span>
-        </td>
+        <td><label>Last Name(*) </label></td>
+        <td><input type="text" value="Lastname" id="lastName"
+          th:field="*{lastName}" placeholder="Lastname"
+        /> <span class="form-error"
+          th:if="${#fields.hasErrors('lastName')}"
+          th:errors="*{lastName}"
+        >Incorrect Name</span></td>
+      </tr>
+
+      <tr>
+      <tr>
+      <tr>
+        <td><label for="password">Password</label></td>
+        <td><input type="password" id="password"
+          th:field="*{password}" placeholder="***********"
+        /><span class="form-error"
+          th:if="${#fields.hasErrors('password')}"
+          th:errors="*{password}"
+        >Incorrect Name</span></td>
+
+      </tr>
+
+      <tr>
+        <td><label for="confirmationPassword">Password</label></td>
+        <td><input type="password" id="confirmationPassword"
+          th:field="*{confirmationPassword}" placeholder="***********"
+        /><span class="form-error"
+          th:if="${#fields.hasErrors('confirmationPassword')}"
+          th:errors="*{confirmationPassword}"
+        >Incorrect Name</span></td>
+
       </tr>
 
       <tr></tr>
 
       <!-- Email (Optional) -->
       <tr>
-        <td>
-          <label>Email </label>
-        </td>
-        <td>
-          <input type="text" value="email" id="email"
-            th:field="*{email}" placeholder="email@domain.com"
-          /> <span class="form-error"
-            th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
-          >Incorrect Name</span>
-        </td>
+        <td><label>Email </label></td>
+        <td><input type="text" value="email" id="email"
+          th:field="*{email}" placeholder="email@domain.com"
+        /> <span class="form-error"
+          th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+        >Incorrect Email</span></td>
       </tr>
+
+
+
     </table>
     <br>
     <button type="submit" name="submitForm" value="0">Submit</button>

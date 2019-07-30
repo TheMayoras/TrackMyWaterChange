@@ -23,5 +23,5 @@ public class TrackMyWaterChangeApplication {
 	public CustomSiteProperties customSiteProperties() {
 		return new CustomSiteProperties();
 	}
-
+	
 }

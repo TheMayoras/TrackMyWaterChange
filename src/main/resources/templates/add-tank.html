@@ -14,15 +14,6 @@
 	text-align: center;
 }
 
-.empty-table-alert-fill:after {
-	content:
-		"--------------------------------------------------------------------------------------";
-	color: red;
-	white-space: nowrap;
-	max-width: 25%;
-	overflow: hidden;
-}
-
 .tank-table-row {
 	width: 100px;
 }
@@ -35,17 +26,47 @@
 	white-space: nowrap;
 }
 
+.form-error {
+	color: red;
+	font-style: italic;
+}
+
+.increased-size {
+	font-size: 125%;
+	fon
+}
+
+.new-tank-row {
+	white-space: nowrap;
+}
+
+new-tank-errors {
+	padding: 0px;
+	margin: 0px;
+	border-collapse: collapse;
+	font-color: red;
+}
+
+.new-tank-errors td {
+	vertical-align: top;
+}
+
+.new-tank-errors td p {
+	padding: 0px;
+	margin: 0px;
+}
+
 #water-change-col {
 	width: 200px;
 }
 
 #add-tank-row {
-  color:red;
-  colspan:4;
+	color: red;
+	colspan: 4;
 }
 
 #add-tank-button {
-  
+	
 }
 </style>
 </head>
@@ -56,56 +77,79 @@
   </div>
 
   <div id="tank-table">
-    <table>
-      <thead>
-        <tr>
-          <th class="tank-table-row">Name</th>
-          <th class="tank-table-row">Size</th>
-          <th class="tank-table-row">Location</th>
-          <th class="tank-table-row" id="water-change-col">Number
-            of Water Changes</th>
-        </tr>
-      </thead>
-      <tbody>
 
-        <!-- Add Tank Button -->
-        <tr>
-        <td id="blank-col" colspan=4>
-          <td colspan=1 id="add-tank-row">
-            <form th:action="@{/home/add-tank}" method="GET" th:object="${user}">
-              <button type="submit">Add Tank</button>
-            </form>
-          </td>
-        </tr>
+    <form th:if="${newTank != null && user != null}"
+      th:object="${newTank}" th:action="@{/home/add-tank}" method="POST"
+    >
 
-        <!-- Row to display if no tanks available -->
-        <tr th:if="${user.tanks == null || user.tanks.size() == 0}">
-          <!-- ||  -->
-          <td colspan="1" class="empty-table-alert-fill"></td>
-          <td colspan="2" class="empty-table-alert">No Tanks</td>
-          <td colspan="1" class="empty-table-alert-fill"></td>
-        </tr>
+      <!-- Tank Name taken -->
+      <p class="form-error increased-size"
+        th:if="${#fields.hasErrors('global')}" th:errors="*{global}"
+      ></p>
+      <table>
+        <thead>
+          <tr>
+            <th class="tank-table-row">Name</th>
+            <th class="tank-table-row">Size</th>
+            <th class="tank-table-row">Location</th>
+            <th class="tank-table-row" id="water-change-col">Number
+              of Water Changes</th>
+          </tr>
+        </thead>
+        <tbody>
 
-        <!-- List Tanks -->
-        <tr th:each="tank : ${user?.tanks}" class="tank-row">
-          <td th:text="${tank.name}"></td>
-          <td th:text="${tank.size}" class="tank-align-center"></td>
-          <td th:text="${tank.location}"></td>
-          <td
-            th:text="${tank.waterChanges == null ? 0 : tank.waterChanges.size()}"
-            class="tank-align-center"
-          ></td>
-          <td>
-            <form th:object="${user}" th:action="@{/tank}" method="GET">
-              <button type="submit" th:value="${tank.id}"
-                name="waterChangeId"
-              >See Water Changes for Tank</button>
-            </form>
-          </td>
-        </tr>
+          <!-- List Tanks -->
+          <tr th:each="tank : ${user.tanks}" class="tank-row">
+            <td th:text="${tank.name}"></td>
+            <td th:text="${tank.size}" class="tank-align-center"></td>
+            <td th:text="${tank.location}"></td>
+            <td
+              th:text="${tank.waterChanges == null ? 0 : tank.waterChanges.size()}"
+              class="tank-align-center"
+            ></td>
+          </tr>
 
-      </tbody>
-    </table>
+          <!-- New Tank to Add -->
+          <tr class="new-tank-row">
+
+            <td><input th:field="*{name}" placeholder="Tank's Name" />
+            </td>
+            <td><input th:field="*{size}"
+              placeholder="Tank's Size (no units)"
+            /></td>
+            <td><input th:field="*{location}"
+              placeholder="Tank's Location"
+            /></td>
+            <td><input type=hidden th:field="${user.id}"
+              th:value="${user.id}"
+            />
+              <button type="submit">Submit</button> <input type="hidden"
+              th:value="${user.firstName}" th:field="${user.firstName}"
+            /><input type="hidden" th:value="${user.tanks}"
+              th:field="${user.tanks}"
+            /><input type="hidden" th:field="*{id}" th:value="*{id}" /></td>
+          </tr>
+
+          <!-- Tank add Errors -->
+          <tr th:if="${#fields.hasErrors('*')}" class="new-tank-errors">
+            <td><p class="form-error"
+                th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+              ></p></td>
+
+            <td>
+              <p class="form-error" th:if="${#fields.hasErrors('size')}"
+                th:errors="*{size}"
+              ></p>
+            </td>
+
+            <td><p class="form-error"
+                th:if="${#fields.hasErrors('location')}"
+                th:errors="*{location}"
+              ></p></td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
   </div>
 </body>
 </html>

@@ -1,7 +1,5 @@
 package themayoras.trackmywaterchange.controller;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import themayoras.trackmywaterchange.entity.User;
+import themayoras.trackmywaterchange.entity.UserCommand;
 import themayoras.trackmywaterchange.service.UserService;
 
 @Controller
@@ -26,16 +25,21 @@ public class UserController {
 	// userDao
 	@Autowired
 	private UserService userService;
+	
+	@GetMapping("/login")
+	public String getLoginPage() {
+	    return "user-forms/login.html";
+	}
 
 	@GetMapping("/register")
 	public String getRegistrationPage(Model modelPage) {
-		modelPage.addAttribute("newUser", new User());
+		modelPage.addAttribute("newUser", new UserCommand());
 
-		return "registration.html";
+		return "user-forms/registration.html";
 	}
 
 	@PostMapping("/register")
-	public String processRegistration(@ModelAttribute("newUser") @Valid User user, BindingResult result, Model model) {
+	public String processRegistration(@ModelAttribute("newUser") @Valid UserCommand user, BindingResult result, Model model) {
 
 		if (result.hasErrors()) {
 			return "user-forms/registration.html";
@@ -47,47 +51,21 @@ public class UserController {
 			return "user-forms/registration.html";
 		}
 
-		userService.saveOrUpdate(user);
+		userService.registerUser(user);
 
 		return "redirect:/user/login";
 	}
 
-	@GetMapping("/login")
-	public String getLoginPage(Model modelPage) {
-		// add blank user to the model
-		modelPage.addAttribute("user", new User());
-
-		return "user-forms/login.html";
-	}
-
-	@PostMapping("/login")
-	public String loginFromLoginForm(@ModelAttribute("user") @Valid User user, BindingResult result, Model model,
-			HttpServletResponse response) {
-		User loggedInUser = null;
-		try {
-			loggedInUser = userService.findAllByUsername(user.getUsername()).get(0);
-		} catch (NullPointerException npe) {
-			model.addAttribute("loginError", "username not found");
-			return "user-forms/login.html";
-		}
-
-		Cookie cookie = new Cookie("userId", Integer.toString(loggedInUser.getId())); // expires when browser is closed
-		cookie.setPath("/");
-		response.addCookie(cookie);
-		
-		return "redirect:/home";
-	}
-	
 	@GetMapping("/login-expired")
 	public String getLoginExpired(Model model) {
-		
+
 		return "user-forms/login-expired.html";
 	}
-	
+
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
-		StringTrimmerEditor trimmer = new StringTrimmerEditor(true);
-		
+		StringTrimmerEditor trimmer = new StringTrimmerEditor(false);
+
 		binder.registerCustomEditor(String.class, trimmer);
 	}
 }

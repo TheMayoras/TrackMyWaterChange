@@ -10,36 +10,7 @@
 </style>
 </head>
 <body>
-  <h2>Please Login Below</h2>
-  <form th:action="@{/user/login}" method="POST" th:object="${user}">
-    <table>
-
-
-      <!-- Get username -->
-      <tr>
-        <td>
-          <label>Username</label>
-        </td>
-        <td>
-          <input type="text" value="Username" id="username"
-            th:field="*{username}" placeholder="MY USERNAME"
-          />
-        </td>
-        <td th:if="${loginError != null}">
-          <!-- Username not found -->
-          <label th:text="${loginError}" class="form-error">Username
-            not found</label>
-        </td>
-      </tr>
-    </table>
-    <button type="submit" name="submitForm">Submit</button>
-  </form>
-  <p>
-    Not registered? <a href="/user/register">Click here</a>
-  </p>
-  <br>
-  <p>
-    <a href="/">Return home</a>
-  </p>
+<h2>Hmm...It seems your login expired...</h2>
+<p>Please relogin <a href="/user/login">here</a>
 </body>
 </html>

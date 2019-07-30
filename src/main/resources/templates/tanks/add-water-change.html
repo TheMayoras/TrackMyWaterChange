@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title th:text="@{'Login - ' + ${@customSiteProperties.siteName}}"></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+<div id="tank-info">
+  <h2>Add Water Change</h2>
+  <h4 th:text="${tank.name}"></h4>
+  <ul>
+    <li th:text="${tank.size}"/>
+    <li th:text="${tank.location}" />
+  </ul>
+</div>
+
+<div id="add-form">
+  <form th:action="@{/tanks/add/waterChange/__${tank.id}__}" method="POST" th:object="${newWaterChange}">
+
+  </form>
+</div>
+</body>
+</html>

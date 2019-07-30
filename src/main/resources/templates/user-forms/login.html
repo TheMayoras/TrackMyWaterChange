@@ -11,28 +11,32 @@
 </head>
 <body>
   <h2>Please Login Below</h2>
-  <form th:action="@{/user/login}" method="POST" th:object="${user}">
-    <table>
+  <form th:action="@{/user/login}" method="POST">
+    <fieldset>
+      <div>
+        <p th:if="${param.error}" class="form-error">Invalid username or password</p>
+      </div>
+      <table>
 
 
-      <!-- Get username -->
-      <tr>
-        <td>
-          <label>Username</label>
-        </td>
-        <td>
-          <input type="text" value="Username" id="username"
-            th:field="*{username}" placeholder="MY USERNAME"
+        <!-- Get username -->
+        <tr>
+          <td><label for="username">Username</label></td>
+          <td><input type="text" id="username"
+            name="username" placeholder="MY USERNAME"
+          /></td>
+          <td><label for="password">Password</label></td>
+          <td><input type="password" name="password" id="password"
+            placeholder="*******************"
           />
-        </td>
-        <td th:if="${loginError != null}">
-          <!-- Username not found -->
-          <label th:text="${loginError}" class="form-error">Username
-            not found</label>
-        </td>
-      </tr>
-    </table>
-    <button type="submit" name="submitForm">Submit</button>
+        </tr>
+        <tr>
+          <td><button type="submit" name="login">Log
+              In</button></td>
+        </tr>
+      </table>
+
+    </fieldset>
   </form>
   <p>
     Not registered? <a href="/user/register">Click here</a>

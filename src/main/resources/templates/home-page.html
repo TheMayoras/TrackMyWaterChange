@@ -94,11 +94,22 @@
             th:text="${tank.waterChanges == null ? 0 : tank.waterChanges.size()}"
             class="tank-align-center"
           ></td>
+
+          <!-- See Water Changes for tank -->
           <td>
-            <form th:object="${user}" th:action="@{/tank}" method="GET">
+            <form th:object="${user}" th:action="@{/tank/list}" method="GET">
               <button type="submit" th:value="${tank.id}"
-                name="waterChangeId"
+                name="tankId"
               >See Water Changes for Tank</button>
+            </form>
+          </td>
+
+          <!-- Delete Tank -->
+          <td>
+            <form th:object="${user}"
+              th:action="@{/tank/delete/__${tank.id}__}" method="POST"
+            >
+              <button type="submit">Delete Tank</button>
             </form>
           </td>
         </tr>

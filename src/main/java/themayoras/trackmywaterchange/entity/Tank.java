@@ -11,7 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 
 import themayoras.trackmywaterchange.entity.validation.TankLocation;
@@ -34,24 +36,33 @@ public class Tank {
 	// size of the tank
 	@TankSize
 	@Column(name = "size")
-	private double size;
+	private Double size;
 
 	// location of the tank
 	@TankLocation
 	@Column(name = "location")
 	private String location;
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_user")
+	private User user;
+
 	// list of water changes on the tank.
 	// LAZY. There can be a lot of water changes, so we need want lazy
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_tank")
 	private List<WaterChange> waterChanges;
 	
+	@PreRemove
+	public void removeTankFromUser() {
+		this.user.remove(this);
+	}
+
 	public void addWaterChange(WaterChange waterChange) {
 		if (waterChanges == null) {
 			waterChanges = new ArrayList<>();
 		}
-		
+
 		waterChanges.add(waterChange);
 	}
 
@@ -87,11 +98,11 @@ public class Tank {
 		this.name = name;
 	}
 
-	public double getSize() {
+	public Double getSize() {
 		return size;
 	}
 
-	public void setSize(double size) {
+	public void setSize(Double size) {
 		this.size = size;
 	}
 
@@ -109,6 +120,14 @@ public class Tank {
 
 	public void setWaterChanges(List<WaterChange> waterChanges) {
 		this.waterChanges = waterChanges;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	@Override

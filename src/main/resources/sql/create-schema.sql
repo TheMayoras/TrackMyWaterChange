@@ -13,6 +13,7 @@ DROP TABLE IF EXISTS `water-change-db`.`users`;
 -- create users table
 CREATE TABLE `water-change-db`.`users` (
   `id_user` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `password` VARCHAR(60) BINARY NOT NULL,
   `first_name` VARCHAR(45) NOT NULL,
   `last_name` VARCHAR(45) NOT NULL,
   `username` VARCHAR(45) NOT NULL,

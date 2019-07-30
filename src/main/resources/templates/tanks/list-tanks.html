@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title th:text="@{'Login - ' + ${@customSiteProperties.siteName}}"></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style>
+.form-error {
+	color: red;
+}
+
+.empty-table-alert {
+	color: red;
+	font-size: 20px;
+	text-align: center;
+}
+
+.empty-table-alert-fill:after {
+	content:
+		"--------------------------------------------------------------------------------------";
+	color: red;
+	white-space: nowrap;
+	max-width: 25%;
+	overflow: hidden;
+}
+
+.tank-table-row {
+	width: 100px;
+}
+
+.tank-align-center {
+	text-align: center;
+}
+
+.tank-row td {
+	white-space: nowrap;
+}
+
+#water-change-col {
+	width: 200px;
+}
+
+#add-tank-button {
+	
+}
+</style>
+</head>
+
+<body>
+  <div id="tank-info">
+    <h2 th:text="${tank.name}"></h2>
+    <ul>
+      <li th:text="${tank.size}"></li>
+      <li th:text="${tank.location}"></li>
+    </ul>
+  </div>
+  
+  <div id="add-tank">
+    <a th:href="${'/tank/add/waterChange/' + tank.id}">Add Water Change</a>
+  </div>
+
+  <div id="tank-table">
+    <table>
+      <thead>
+        <tr>
+          <th class="tank-table-row">Date</th>
+          <th class="tank-table-row">Amount</th>
+          <th class="tank-table-row">Comments</th>
+        </tr>
+      </thead>
+      <tbody>
+
+
+        <!-- Row to display if no tanks available -->
+        <tr th:if="${tank == null || tank.waterChanges.size() == 0}">
+          <!-- ||  -->
+          <td colspan="1" class="empty-table-alert-fill"></td>
+          <td colspan="1" class="empty-table-alert">No Water Changes</td>
+          <td colspan="1" class="empty-table-alert-fill"></td>
+        </tr>
+
+        <!-- List Tanks -->
+        <tr th:each="waterChange : ${tank?.waterChanges}"
+          class="tank-row"
+        >
+          <td th:text="${#dates.format(waterChange.date)}" class="date"></td>
+          <td th:text="${waterChange.amount}"></td>
+          <td>
+            <ul>
+              <li th:each="${comment : waterChange.commets}">
+                <p th:text="${comment.comment}"></p>
+              </li>
+            </ul>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+  <div class="return-home">
+    Return <a href="/home">home</a>
+  </div>
+</body>
+</html>

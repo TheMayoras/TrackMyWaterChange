@@ -1,5 +1,6 @@
 package themayoras.trackmywaterchange.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -108,5 +109,13 @@ public class WaterChange implements Trackable {
 		}
 		return commentString.substring(0,  commentString.length() - 2);
 	}
+
+    public void addComment(WaterChangeComment comment) {
+        if (comments == null) {
+            comments = new ArrayList<>();
+        }
+        
+        comments.add(comment);
+    }
 
 }
