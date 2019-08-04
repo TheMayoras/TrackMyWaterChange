@@ -34,39 +34,42 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     //@formatter:off
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-	auth.userDetailsService(userDetailsService);
+        auth.userDetailsService(userDetailsService);
 	
-	auth.authenticationProvider(authenticationProvider());
+        auth.authenticationProvider(authenticationProvider());
 	
-	auth.jdbcAuthentication()
-		.passwordEncoder(passwordEncoder)
-		.dataSource(dataSource)
-		.usersByUsernameQuery("SELECT username, password, true from users WHERE username=?")
-		.authoritiesByUsernameQuery("SELECT username, role FROM users_roles WHERE username=?");
+        auth.jdbcAuthentication()
+            .passwordEncoder(passwordEncoder)
+            .dataSource(dataSource)
+		        .usersByUsernameQuery("SELECT username, password, true from users WHERE username=?")
+		        .authoritiesByUsernameQuery("SELECT username, role FROM users_roles WHERE username=?");
 	
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-	http.authorizeRequests()
-		.antMatchers("/home", "/home/**", "/tank", "/tank/**").hasRole("USER")
-		.antMatchers("/admin/**").hasRole("ADMIN")
-		.antMatchers("/user/register").permitAll()
-	.and()
-	.formLogin()
-		.loginPage("/user/login")
-		.failureUrl("/user/login?error")
-		.permitAll()
-		.defaultSuccessUrl("/home")
-	.and()
-	.logout()
-		.logoutSuccessUrl("/?logout")
-		.invalidateHttpSession(true)
+        http
+            .authorizeRequests()
+		            .antMatchers("/home", "/home/**", "/tank", "/tank/**").hasRole("USER")
+		            .antMatchers("/admin/**").hasRole("ADMIN")
+		            .antMatchers("/user/register").permitAll()
+		        .and()
+		        .formLogin()
+		            .loginPage("/user/login")
+		            .failureUrl("/user/login?error")
+            		.permitAll()
+            		.defaultSuccessUrl("/home")
+            .and()
+            .logout()
+                .logoutSuccessUrl("/?logout")
+                .invalidateHttpSession(true)
                 .clearAuthentication(true)
-        .and()
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)               
-        .and()
-        .userDetailsService(userDetailsService);
+            .and()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)               
+            .and()
+            .exceptionHandling().accessDeniedPage("/user-forms/access-denied.html")
+            .and()
+            .userDetailsService(userDetailsService);
               
     }
     
@@ -76,21 +79,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-	return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder();
     }
-    
+
     @Bean
     public UserDetailsService userDetailsServiceBean() {
-	return new UserDetailsServiceImpl();
+        return new UserDetailsServiceImpl();
     }
-    
+
     @Bean
-    public DaoAuthenticationProvider authenticationProvider(){
-        final CustomAuthenticationProvider customAutheticationProvider = new CustomAuthenticationProvider(userDetailsServiceBean());
+    public DaoAuthenticationProvider authenticationProvider() {
+        final CustomAuthenticationProvider customAutheticationProvider = new CustomAuthenticationProvider(
+                userDetailsServiceBean());
         customAutheticationProvider.setUserDetailsService(this.userDetailsService);
         customAutheticationProvider.setPasswordEncoder(passwordEncoder());
-        
+
         return customAutheticationProvider;
     }
-    
+
 }

@@ -1,24 +1,60 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<title th:text="@{'Login - ' + ${@customSiteProperties.siteName}}"></title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title th:text="@{'Login - ' + ${@customSiteProperties.siteName}}"></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <th:block th:insert="fragments/scripts-css :: incl-jQuery"></th:block>
+  <th:block th:insert="fragments/scripts-css :: incl-bootstrap"></th:block>
+  <th:block th:insert="fragments/scripts-css :: incl-jQuery-ui"></th:block>
+
+  <script type="text/javascript" th:src="@{/js/tanks/add-water-change.js}"></script>
 </head>
 
 <body>
-<div id="tank-info">
-  <h2>Add Water Change</h2>
-  <h4 th:text="${tank.name}"></h4>
-  <ul>
-    <li th:text="${tank.size}"/>
-    <li th:text="${tank.location}" />
-  </ul>
-</div>
+  <div class="container">
+  <div id="tank-info">
+    <h2>Add Water Change</h2>
+    <h4 th:text="${tank.name}"></h4>
+    <ul>
+      <li th:text="${tank.size}"></li>
+      <li th:text="${tank.location}"></li>
+    </ul>
+  </div>
 
-<div id="add-form">
-  <form th:action="@{/tanks/add/waterChange/__${tank.id}__}" method="POST" th:object="${newWaterChange}">
-
-  </form>
+  <div id="add-form">
+    <form th:action="@{/tank/add/waterChange/__${tank.id}__}" method="POST" th:object="${newWaterChange}">
+      <table>
+        <tr>
+          <td><label for="date">Date</label></td>
+          <td><input type="text" th:field="*{date}" class="calendar-picker" /></td>
+        </tr>
+        <tr>
+          <td><label for="amount">Amount:</label></td>
+          <td><input th:field="*{amount}" placeholder="amount" min="0" /></td>
+        </tr>
+        <tr>
+          <td><label th:if="${newWaterChange.comments != null}" for="comments">Comments</label></td>
+          <td>
+            <dl th:if="${newWaterChange.comments != null}" th:field="*{comments}">
+              <dt th:each="comment, itemStat  : ${newWaterChange.comments}">
+                <input type="text" placeholder="Comment" th:value="${comment.comment}"
+                  th:field="*{comments[__${itemStat.index}__].comment}" />
+              </dt>
+            </dl>
+          </td>
+          <td>
+            <button type="submit" name="addComment">Add Comment</button>
+          </td>
+        </tr>
+      </table>
+      <button type="submit" name="add" default>Confirm</button>
+    </form>
+  </div>
+  <div class="row">
+    <p>Return <a href="/home">home</a></p>
+  </div>
 </div>
 </body>
+
 </html>

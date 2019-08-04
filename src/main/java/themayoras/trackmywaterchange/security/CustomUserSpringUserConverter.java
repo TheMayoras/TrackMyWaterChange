@@ -17,12 +17,12 @@ public abstract class CustomUserSpringUserConverter {
     }
 
     public static org.springframework.security.core.userdetails.User getSpringUser(User user) {
-	String username = user.getUsername();
-	String password = user.getPassword();
-	Set<Role> roles = user.getRoles();
+        String    username = user.getUsername();
+        String    password = user.getPassword();
+        Set<Role> roles    = user.getRoles();
 
-	return new org.springframework.security.core.userdetails.User(username, password, true, true, true, true,
-		getAuthorities(roles));
+        return new org.springframework.security.core.userdetails.User(username, password, true, true, true, true,
+                getAuthorities(roles));
     }
 
     /**
@@ -35,15 +35,15 @@ public abstract class CustomUserSpringUserConverter {
      */
     private static Collection<? extends GrantedAuthority> getAuthorities(final Collection<Role> roles) {
 
-	Collection<GrantedAuthority> grantedAuthority = new ArrayList<>();
+        Collection<GrantedAuthority> grantedAuthority = new ArrayList<>();
 
-	// Add the @{User} roles to the grantedAuthority Collection and return the
-	// Collection
-	for (Role role : roles) {
-	    grantedAuthority.add(new SimpleGrantedAuthority(role.getRole()));
-	}
+        // Add the @{User} roles to the grantedAuthority Collection and return the
+        // Collection
+        for (Role role : roles) {
+            grantedAuthority.add(new SimpleGrantedAuthority(role.getRole()));
+        }
 
-	return grantedAuthority;
+        return grantedAuthority;
 
     }
 }

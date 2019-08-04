@@ -2,6 +2,8 @@ package themayoras.trackmywaterchange.service;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,8 +44,9 @@ public class TankServiceImpl implements TankService {
     }
 
     @Override
+    @Transactional
     public boolean deleteWaterChange(int waterChangeId) {
-        return waterChangeDao.removeById(waterChangeId).size() == 0 ? false : true;
+        return waterChangeDao.removeById(waterChangeId) > 0;
     }
 
     @Override
@@ -53,18 +56,21 @@ public class TankServiceImpl implements TankService {
 
     @Override
     public boolean createWaterChange(Tank tank, WaterChange waterChange) {
+        waterChange.removeAllEmptyComments();
         tank.addWaterChange(waterChange);
-        return tankDao.save(tank).getId() > 0;
+
+        return waterChangeDao.save(waterChange) != null;
     }
 
     @Override
     public boolean updateWaterChange(WaterChange waterChange) {
+        waterChange.removeAllEmptyComments();
         return waterChangeDao.save(waterChange).getId() > 0;
     }
 
     @Override
     public void saveOrUpdate(Tank tank) {
-        tankDao.save(tank);
+        tank = tankDao.save(tank);
     }
 
     @Override
@@ -86,6 +92,11 @@ public class TankServiceImpl implements TankService {
     @Override
     public Tank getTank(Tank tank) {
         return getTank(tank.getId());
+    }
+
+    @Override
+    public WaterChange getWaterChange(int id) {
+        return waterChangeDao.findById(id).orElseGet(null);
     }
 
 }

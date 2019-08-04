@@ -13,20 +13,20 @@ public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private RoleDao roleDao;
-    
+
     @Override
     public Role getRoleByName(String role) {
-	if (!role.startsWith("ROLE_")) {
-	    role = "ROLE_" + role;
-	}
-	
-	List<Role> roles = roleDao.findByRole(role);
-	
-	if (roles == null || roles.isEmpty()) {
-	    return null;
-	} 
-	
-	return roles.get(0);
+        if (!role.startsWith("ROLE_")) {
+            role = "ROLE_" + role;
+        }
+
+        List<Role> roles = roleDao.findByRole(role);
+
+        if (roles == null || roles.isEmpty()) {
+            return null;
+        }
+
+        return roles.get(0);
     }
 
 }

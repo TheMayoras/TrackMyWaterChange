@@ -1,3 +1,25 @@
+SET FOREIGN_KEY_CHECKS = FALSE;
+
+DROP TABLE IF EXISTS `water-change-db`.`users_user_roles`;
+
+DROP TABLE IF EXISTS `water-change-db`.`user_roles`;
+
+DROP VIEW IF EXISTS `water-change-db`.`users_roles`;
+
+
+CREATE TABLE `water-change-db`.`user_roles` (
+  `id_user_roles` INT UNSIGNED AUTO_INCREMENT NOT NULL,
+  `role` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id_user_roles`),
+  UNIQUE INDEX `role_UNIQUE` (`role` ASC) VISIBLE
+);
+
+-- Insert ADMIN and USER
+INSERT INTO `water-change-db`.`user_roles` (`role`)
+	VALUES 
+		('ROLE_ADMIN'),
+		('ROLE_USER');
+		
 CREATE TABLE `water-change-db`.`users_user_roles` (
   `id` INT UNSIGNED AUTO_INCREMENT NOT NULL,
   `id_user` INT UNSIGNED NOT NULL,
@@ -18,20 +40,6 @@ CREATE TABLE `water-change-db`.`users_user_roles` (
     ON UPDATE NO ACTION
 );
 
-
-CREATE TABLE `water-change-db`.`user_roles` (
-  `id_user_roles` INT UNSIGNED AUTO_INCREMENT NOT NULL,
-  `role` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`id_user_roles`),
-  UNIQUE INDEX `role_UNIQUE` (`role` ASC) VISIBLE
-);
-
--- Insert ADMIN and USER
-INSERT INTO `water-change-db`.`user_roles` (`role`)
-	VALUES 
-		('ADMIN'),
-		('USER');
-
 -- Create the view to associate usernames with roles
 CREATE VIEW `water-change-db`.`users_roles` AS (
 	WITH `id_users_roles` AS (
@@ -43,4 +51,6 @@ CREATE VIEW `water-change-db`.`users_roles` AS (
     SELECT `username`, `role`
     FROM `users` INNER JOIN `id_users_roles` 
 		ON `users`.`id_user` = `id_users_roles`.`id_user`
-)
+);
+
+SET FOREIGN_KEY_CHECKS = TRUE;

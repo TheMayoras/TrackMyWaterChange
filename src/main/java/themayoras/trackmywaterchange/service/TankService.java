@@ -7,7 +7,7 @@ import themayoras.trackmywaterchange.entity.User;
 import themayoras.trackmywaterchange.entity.WaterChange;
 
 public interface TankService {
-    void saveOrUpdate(Tank tank);
+    void saveOrUpdate (Tank tank);
 
     List<Tank> getTanksForUserWithNameLike(User user, String namePattern);
 
@@ -32,4 +32,7 @@ public interface TankService {
     Tank getTank(int id);
 
     Tank getTank(Tank tank);
+    
+    WaterChange getWaterChange(int id);
+    
 }

@@ -1,3 +1,5 @@
+SET FOREIGN_KEY_CHECKS = FALSE;
+
 -- delete the water change comments table
 DROP TABLE IF EXISTS `water-change-db`.`water_change_comments`;
 
@@ -47,9 +49,8 @@ CREATE TABLE `water-change-db`.`users` (
 -- create the water changes table
 CREATE TABLE `water-change-db`.`water_changes` (
   `id_water_change` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `date` DATETIME NOT NULL,
+  `date` DATE NOT NULL,
   `amount` DOUBLE UNSIGNED NULL COMMENT 'the amount of the water change',
-  `comments` MEDIUMTEXT NULL,
   `id_tank` INT UNSIGNED NOT NULL COMMENT 'Foreign key linking a water change to a tank',
   PRIMARY KEY (`id_water_change`), 
   UNIQUE INDEX `id_water_change_UNIQUE` (`id_water_change` ASC) INVISIBLE,
@@ -64,7 +65,7 @@ CREATE TABLE `water-change-db`.`water_changes` (
 -- create the water change comment table
 CREATE TABLE `water-change-db`.`water_change_comments` (
   `id_comment` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `comment` LONGTEXT NOT NULL,
+  `comment` VARCHAR(255) NOT NULL,
   `id_water_change` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`id_comment`),
   UNIQUE INDEX `id_comment_UNIQUE` (`id_comment` ASC) INVISIBLE,
@@ -74,3 +75,5 @@ CREATE TABLE `water-change-db`.`water_change_comments` (
     REFERENCES `water-change-db`.`water_changes` (`id_water_change`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
+    
+SET FOREIGN_KEY_CHECKS = TRUE;

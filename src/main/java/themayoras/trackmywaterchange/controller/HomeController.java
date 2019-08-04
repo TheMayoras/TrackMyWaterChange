@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import themayoras.trackmywaterchange.bean.SecurityFacade;
 import themayoras.trackmywaterchange.entity.Tank;
 import themayoras.trackmywaterchange.entity.User;
-import themayoras.trackmywaterchange.service.CookieService;
 import themayoras.trackmywaterchange.service.TankService;
 import themayoras.trackmywaterchange.service.UserService;
 
@@ -31,9 +30,6 @@ public class HomeController {
 
   @Autowired
   private TankService tankService;
-
-  @Autowired
-  CookieService cookieService;
 
   @Autowired
   private SecurityFacade securityFacade;

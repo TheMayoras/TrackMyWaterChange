@@ -14,6 +14,6 @@ public interface WaterChangeDao extends JpaRepository<WaterChange, Integer> {
 
 	List<WaterChange> findByAmountBetween(double minAmount, double maxAmount);
 
-	List<WaterChange> removeById(int waterChangeId);
+	int removeById(int waterChangeId);
 
 }
