@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -54,8 +55,10 @@ public class TankController {
     public String getAdddWaterChange(@PathVariable("tankId") int tankId, Model model) {
         Tank tank = tankService.getTank(tankId);
 
-        model.addAttribute("tank", tank);
-        model.addAttribute("newWaterChange", new WaterChange());
+        WaterChange newWaterChange = new WaterChange();
+        newWaterChange.setTank(tank);
+
+        model.addAttribute("newWaterChange", newWaterChange);
 
         return "tanks/add-water-change.html";
     }
@@ -64,12 +67,10 @@ public class TankController {
     public String addCommentToWaterChange(@ModelAttribute("newWaterChange") WaterChange waterChange,
             @PathVariable("tankId") int tankId, Model model) {
 
-        Tank tank = tankService.getTank(tankId);
-        model.addAttribute("tank", tank);
 
         WaterChangeComment comment = new WaterChangeComment();
         comment.setWaterChange(waterChange);
-        
+
         waterChange.addComment(comment);
 
         return "tanks/add-water-change.html";
@@ -83,18 +84,18 @@ public class TankController {
             return "/tanks/add-water-change.html";
         }
 
-        tankService.createWaterChange(tankService.getTank(tankId), waterChange);
+        tankService.createWaterChange(waterChange.getTank(), waterChange);
 
         return "redirect:/home";
     }
-    
+
     @PostMapping("/delete/waterChange/{waterChangeId}")
     public String deleteWaterChange(@PathVariable("waterChangeId") int id) {
-        
+
         Tank tank = tankService.getWaterChange(id).getTank();
-        
+
         tankService.deleteWaterChange(id);
-        
+
         return "redirect:/tank/list/" + tank.getId();
     }
 
@@ -104,9 +105,7 @@ public class TankController {
                 .addFormat("\\d{2}-\\d{2}-\\d{2}", "MM-dd-yy").addFormat("\\d{2}-\\d{2}-\\d{4}", "MM-dd-yyyy")
                 .addFormat("\\d{2}/\\d{2}/\\d{2}", "MM/dd/yy").addFormat("\\d{2}\\/\\d{2}\\/\\d{4}", "MM/dd/yyyy")
                 .addFormat("\\d/\\d{2}/\\d{4}", "M/dd/yyyy").addFormat("\\d/\\d{2}/\\d{2}", "M/dd/yy")
-                .addFormat("\\d/\\d{2}/\\d{4}", "M-dd-yyyy").addFormat("\\d/\\d{2}/\\d{2}", "M-dd-yy")
-                .build();
-        
+                .addFormat("\\d/\\d{2}/\\d{4}", "M-dd-yyyy").addFormat("\\d/\\d{2}/\\d{2}", "M-dd-yy").build();
 
         CustomDateEditor editor = new CustomDateEditor(format, true) {
 
@@ -124,5 +123,20 @@ public class TankController {
         };
 
         binder.registerCustomEditor(Date.class, editor);
+
+        CustomNumberEditor numberEditor = new CustomNumberEditor(Double.class, true) {
+
+            @Override
+            public void setAsText(String text) throws IllegalArgumentException {
+                try {
+                    System.err.println("Number Editor: " + text);
+                    super.setAsText(text);
+                } catch (IllegalArgumentException iae) {
+                    super.setAsText(null);
+                }
+            }
+
+        };
+        binder.registerCustomEditor(Double.class, numberEditor);
     }
 }

@@ -1,7 +1,13 @@
 package themayoras.trackmywaterchange.entity;
 
 public enum QuantityUnits {
-    GAL, L, ML {
+    GAL {
+        @Override
+        public String toString() {
+            return "gal";
+        }
+    },
+    L, ML {
         @Override
         public String toString() {
             return "mL";

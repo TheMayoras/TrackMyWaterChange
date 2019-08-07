@@ -1,155 +1,149 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<title th:text="@{'Login - ' + ${@customSiteProperties.siteName}}"></title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<style>
-.form-error {
-	color: red;
-}
+  <title th:text="@{'Login - ' + ${@customSiteProperties.siteName}}"></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-.empty-table-alert {
-	color: red;
-	font-size: 20px;
-	text-align: center;
-}
+  <th:block th:insert="/fragments/scripts-css.html :: incl-jQuery"></th:block>
+  <th:block th:insert="/fragments/scripts-css.html :: incl-jQuery-ui"></th:block>
+  <th:block th:insert="/fragments/scripts-css.html :: incl-bootstrap"></th:block>
 
-.tank-table-row {
-	width: 100px;
-}
-
-.tank-align-center {
-	text-align: center;
-}
-
-.tank-row td {
-	white-space: nowrap;
-}
-
-.form-error {
-	color: red;
-	font-style: italic;
-}
-
-.increased-size {
-	font-size: 125%;
-	fon
-}
-
-.new-tank-row {
-	white-space: nowrap;
-}
-
-new-tank-errors {
-	padding: 0px;
-	margin: 0px;
-	border-collapse: collapse;
-	font-color: red;
-}
-
-.new-tank-errors td {
-	vertical-align: top;
-}
-
-.new-tank-errors td p {
-	padding: 0px;
-	margin: 0px;
-}
-
-#water-change-col {
-	width: 200px;
-}
-
-#add-tank-row {
-	color: red;
-	colspan: 4;
-}
-
-#add-tank-button {
-	
-}
-</style>
 </head>
 
 <body>
-  <div id="welcome">
-    <h2 th:text="'Welcome, ' + ${user?.firstName}">Hello</h2>
-  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <div id="welcome" class="jumbotron bg-success text-white">
+          <h1 class="display-3" th:text="'Welcome, ' + ${user?.firstName}">
+            Hello
+          </h1>
+          <p class="lead">Add your tank below</p>
+        </div>
+      </div>
+    </div>
 
-  <div id="tank-table">
+    <div class="row justify-content-center mb-5">
+      <div class="col-sm-7 text-center">
+        <form th:object="${newTank}" th:action="@{/home/add-tank}" method="POST">
 
-    <form th:if="${newTank != null && user != null}"
-      th:object="${newTank}" th:action="@{/home/add-tank}" method="POST"
-    >
+          <!-- Tank Name -->
+          <div class="input-group pb-2">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="tank-name-label">Tank Name</span>
+            </div>
 
-      <!-- Tank Name taken -->
-      <p class="form-error increased-size"
-        th:if="${#fields.hasErrors('global')}" th:errors="*{global}"
-      ></p>
-      <table>
-        <thead>
-          <tr>
-            <th class="tank-table-row">Name</th>
-            <th class="tank-table-row">Size</th>
-            <th class="tank-table-row">Location</th>
-            <th class="tank-table-row" id="water-change-col">Number
-              of Water Changes</th>
+            <input class="form-control" type="text" th:field="*{name}" placeholder="Tank Name"
+              aria-label="tank-name-label" aria-describedby="tank-name-label">
+
+            <div class="input-group-append" th:if="${#fields.hasErrors('name')}">
+              <span class="input-group-text bg-danger text-white" th:errors="*{name}"></span>
+            </div>
+          </div>
+
+          <div class="row pb-2">
+            <div class="col pr-0">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="size-label">Size</span>
+                </div>
+
+                <input class="form-control" type="text" placeholder="Size" aria-label="size"
+                  aria-describedby="size-label" th:field="*{size}" />
+
+                <select id="units" class="form-control" th:field="*{units}">
+                  <option th:each="unit : ${T(themayoras.trackmywaterchange.entity.QuantityUnits).values()}"
+                    th:text="${unit}" th:value="${{unit}}"></option>
+                </select>
+
+                <div class="input-group-append" th:if="${#fields.hasErrors('size')}">
+              <span class="input-group-text bg-danger text-white" th:errors="*{size}"></span>
+            </div>
+          </div>
+          </div>
+          </div>
+
+          <div class="input-group pb-2">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="location-label">Location</span>
+            </div>
+
+            <input class="form-control" type="text" placeholder="Location" aria-label="location" aria-describedby="location-label" th:field="*{location}">
+
+            <div class="input-group-append" th:if="${#fields.hasErrors('location')}">
+              <span class="input-group-text bg-danger text-white" th:errors="*{location}"></span>
+            </div>
+          </div>
+        <!-- </div>
+            <div class="col form-group pl-0">
+              
+            </div>
+        </div> -->
+
+        <button type="submit" class="btn btn-success btn-lg">Submit</button>
+        </form>
+      </div>
+      <div class="col-sm-3">
+        <div class="card">
+          <div class="card-body bg-secondary text-light">
+            <h5 class="card-title">Here by mistake?</h5>
+            <p class="card-text">Return <a href="/home" class="btn btn-danger">home</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12">
+      <table class="table table-striped table-hover">
+        <thead class="thead-dark">
+          <tr class="pb-2">
+            <th scope="col">Name</th>
+            <th scope="col" class="text-center">Size</th>
+            <th scope="col">Location</th>
+            <th scope="col" id="water-change-col" class="text-center">Water Change Count</th>
+            <th class="pl-3" scope="col" colspan="2">
+              <form th:action="@{/home/add-tank}" method="GET" id="add-tank">
+                <button type="submit" class="btn btn-outline-info btn-md btn-block disabled" disabled>Add Tank</button>
+              </form>
+            </th>
           </tr>
         </thead>
         <tbody>
 
+          <!-- Row to display if no tanks available -->
+          <tr class="text-danger align-middle" th:if="${user.tanks == null || user.tanks.size() == 0}">
+            <td colspan="6" class="text-danger text-center"><span class="display-4">No Tanks</span></td>
+          </tr>
+
           <!-- List Tanks -->
-          <tr th:each="tank : ${user.tanks}" class="tank-row">
-            <td th:text="${tank.name}"></td>
-            <td th:text="${tank.size}" class="tank-align-center"></td>
+          <tr th:each="tank : ${user?.tanks}" class="tank-row">
+            <th scope="row"><a th:href="@{/tank/list/__${tank.id}__}" th:text="${tank.name}" data-toggle="tooltip"
+                data-placement="right" title="click to see breakdown"></a></th>
+            <td th:text="@{__${tank.size}__ __${tank.units}__}" class="text-center"></td>
             <td th:text="${tank.location}"></td>
-            <td
-              th:text="${tank.waterChanges == null ? 0 : tank.waterChanges.size()}"
-              class="tank-align-center"
-            ></td>
-          </tr>
+            <td th:text="${tank.waterChanges == null ? 0 : tank.waterChanges.size()}" class="text-center"></td>
 
-          <!-- New Tank to Add -->
-          <tr class="new-tank-row">
-
-            <td><input th:field="*{name}" placeholder="Tank's Name" />
-            </td>
-            <td><input th:field="*{size}"
-              placeholder="Tank's Size (no units)"
-            /></td>
-            <td><input th:field="*{location}"
-              placeholder="Tank's Location"
-            /></td>
-            <td><input type=hidden th:field="${user.id}"
-              th:value="${user.id}"
-            />
-              <button type="submit">Submit</button> <input type="hidden"
-              th:value="${user.firstName}" th:field="${user.firstName}"
-            /><input type="hidden" th:value="${user.tanks}"
-              th:field="${user.tanks}"
-            /><input type="hidden" th:field="*{id}" th:value="*{id}" /></td>
-          </tr>
-
-          <!-- Tank add Errors -->
-          <tr th:if="${#fields.hasErrors('*')}" class="new-tank-errors">
-            <td><p class="form-error"
-                th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
-              ></p></td>
-
+            <!-- See Water Changes for tank -->
             <td>
-              <p class="form-error" th:if="${#fields.hasErrors('size')}"
-                th:errors="*{size}"
-              ></p>
+              <a th:href="@{/tank/add/waterChange/__${tank.id}__}"
+                class="btn btn-outline-primary btn-md btn-block disabled" role="button" disabled>Add Water Change</a>
             </td>
-
-            <td><p class="form-error"
-                th:if="${#fields.hasErrors('location')}"
-                th:errors="*{location}"
-              ></p></td>
+            <td>
+              <!-- Delete Tank -->
+              <form th:object="${user}" th:action="@{/tank/delete/__${tank.id}__}" method="POST">
+                <button type="submit" class="btn btn-outline-danger btn-md btn-block disabled" disabled>Delete
+                  Tank</button>
+              </form>
+            </td>
           </tr>
+
         </tbody>
       </table>
-    </form>
+    </div>
   </div>
+
 </body>
+
 </html>

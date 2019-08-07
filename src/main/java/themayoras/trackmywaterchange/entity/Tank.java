@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,9 +18,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.PreRemove;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 import themayoras.trackmywaterchange.entity.validation.TankLocation;
-import themayoras.trackmywaterchange.entity.validation.TankSize;
+import themayoras.trackmywaterchange.entity.validation.Quantity;
 
 @Entity
 @Table(name = "tanks")
@@ -31,13 +34,18 @@ public class Tank {
     private int id;
 
     // name of the tank
+    @NotEmpty(message="is required")
     @Column(name = "name")
     private String name;
 
     // size of the tank
-    @TankSize
+    @Quantity(message="is required")
     @Column(name = "size")
     private Double size;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "units")
+    private QuantityUnits units;
 
     // location of the tank
     @TankLocation
@@ -53,6 +61,10 @@ public class Tank {
     @OrderBy("date DESC")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "tank", orphanRemoval = true)
     private List<WaterChange> waterChanges;
+    
+    public String quantityString() {
+        return this.size + " " + units.toString();
+    }
 
     @PreRemove
     public void removeTankFromUser() {
@@ -63,7 +75,7 @@ public class Tank {
         if (waterChanges == null) {
             waterChanges = new ArrayList<>();
         }
-        
+
         waterChanges.add(waterChange);
         waterChange.setTank(this);
     }
@@ -71,15 +83,17 @@ public class Tank {
     public Tank() {
     }
 
-    public Tank(String name, double size, String location) {
+    public Tank(String name, double size, QuantityUnits units, String location) {
         this.name     = name;
         this.size     = size;
+        this.units    = units;
         this.location = location;
     }
 
-    public Tank(String name, double size, String location, List<WaterChange> waterChanges) {
+    public Tank(String name, double size, QuantityUnits units, String location, List<WaterChange> waterChanges) {
         this.name         = name;
         this.size         = size;
+        this.units        = units;
         this.location     = location;
         this.waterChanges = waterChanges;
     }
@@ -106,6 +120,14 @@ public class Tank {
 
     public void setSize(Double size) {
         this.size = size;
+    }
+
+    public QuantityUnits getUnits() {
+        return this.units;
+    }
+
+    public void setUnits(QuantityUnits units) {
+        this.units = units;
     }
 
     public String getLocation() {

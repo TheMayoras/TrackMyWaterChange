@@ -7,6 +7,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,6 +21,9 @@ import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+
+import themayoras.trackmywaterchange.entity.validation.Quantity;
 
 @Entity
 @Table(name = "water_changes")
@@ -31,13 +36,19 @@ public class WaterChange implements Trackable {
     private int id;
 
     // water change date
+    @NotNull(message = "required")
     @Temporal(TemporalType.DATE)
     @Column(name = "date")
     private Date date;
 
     // amount of the water change
+    @Quantity(message = "cannot be negative")
     @Column(name = "amount")
-    private double amount;
+    private Double amount;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "units")
+    private QuantityUnits units;
 
     // comments about the water change
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "waterChange")
@@ -47,13 +58,22 @@ public class WaterChange implements Trackable {
     @JoinColumn(name = "id_tank")
     private Tank tank;
 
+    public String quantityString() {
+        return this.amount + " " + this.units;
+    }
+
     @PrePersist
     public void saveWaterChange() {
-        for (WaterChangeComment comment : comments) {
-            comment.setWaterChange(this);
+        System.err.println("Water Change: " + this);
+        removeAllEmptyComments();
+
+        if (comments != null) {
+            for (WaterChangeComment comment : comments) {
+                comment.setWaterChange(this);
+            }
         }
     }
-    
+
     @PreRemove
     public void removeWaterChange() {
         this.tank.getWaterChanges().remove(this);
@@ -91,12 +111,20 @@ public class WaterChange implements Trackable {
         this.date = date;
     }
 
-    public double getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public QuantityUnits getUnits() {
+        return this.units;
+    }
+
+    public void setUnits(QuantityUnits units) {
+        this.units = units;
     }
 
     public List<WaterChangeComment> getComments() {
@@ -140,7 +168,10 @@ public class WaterChange implements Trackable {
     }
 
     public void removeAllEmptyComments() {
-        comments.removeIf(c -> c.isEmpty());
+        if (comments != null) {
+            comments.removeIf(c -> c.isEmpty());
+        }
+
     }
 
 }

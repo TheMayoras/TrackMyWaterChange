@@ -25,101 +25,103 @@ import themayoras.trackmywaterchange.service.UserService;
 @Controller
 @RequestMapping("/home")
 public class HomeController {
-  @Autowired
-  private UserService userService;
+    @Autowired
+    private UserService userService;
 
-  @Autowired
-  private TankService tankService;
+    @Autowired
+    private TankService tankService;
 
-  @Autowired
-  private SecurityFacade securityFacade;
+    @Autowired
+    private SecurityFacade securityFacade;
 
-  @GetMapping("")
-  public String getHome(Model model) {
+    @GetMapping("")
+    public String getHome(Model model) {
 
-    User user = securityFacade.getCurrentUser();
-    
-    if (user == null) {
-      return "redirect:/user/login-required";
-    }
+        User user = securityFacade.getCurrentUser();
 
-    model.addAttribute("user", user);
-
-    System.err.println("User added to model: " + user);
-
-    return "home-page.html";
-  }
-
-  // add a tank
-  @GetMapping(value = "add-tank")
-  public String addTankToUser(Model model) {
-
-
-    User user = securityFacade.getCurrentUser();
-    Tank tank = new Tank();
-
-    System.err.println("User Added to add-tank: " + user);
-    System.err.println("Tank Added to add-tank: " + tank);
-
-    model.addAttribute("user", user);
-    model.addAttribute("newTank", tank);
-
-    return "add-tank.html";
-  }
-
-  @PostMapping(value = "add-tank")
-  public String addTank(@ModelAttribute("newTank") @Valid Tank tank, BindingResult result,
-      @ModelAttribute("user") User user) {
-
-    if (result.hasErrors()) {
-      return "add-tank.html";
-    }
-
-    boolean validName = true;
-    try {
-      validName = tankService.getTanksForUserWithNameLike(user, tank.getName()).size() == 0;
-    } catch (NullPointerException npe) {
-      validName = false;
-    }
-
-    if (!validName) {
-      result.addError(new ObjectError("newTank", "tank already in use"));
-      return "add-tank.html";
-    }
-
-    System.err.println("Tank being Added: " + tank);
-
-    tank.setId(0);
-    userService.addTankToUser(user.getId(), tank);
-
-    return "redirect:/home";
-  }
-
-  // redirect to get the water changes for the tank
-  @RequestMapping(value = "", params = { "tankId" })
-  public String getTanksWaterChanges(@ModelAttribute("user") User user, BindingResult result) {
-
-    return "/home";
-  }
-
-  @InitBinder
-  public void initBinder(WebDataBinder binder) {
-    CustomNumberEditor editor = new CustomNumberEditor(Double.class, true) {
-      @Override
-      public void setAsText(String text) throws IllegalArgumentException {
-
-        try {
-          super.setAsText(text);
-
-        } catch (Exception iae) {
-          setValue(null);
+        if (user == null) {
+            return "redirect:/user/login-required";
         }
-      }
 
-    };
-    binder.registerCustomEditor(Double.class, editor);
+        model.addAttribute("user", user);
 
-    StringTrimmerEditor trimmer = new StringTrimmerEditor(true);
-    binder.registerCustomEditor(String.class, trimmer);
-  }
+        System.err.println("User added to model: " + user);
+
+        return "home-page.html";
+    }
+
+    // add a tank
+    @GetMapping(value = "add-tank")
+    public String addTankToUser(Model model) {
+
+        User user = securityFacade.getCurrentUser();
+        Tank tank = new Tank();
+
+        System.err.println("User Added to add-tank: " + user);
+        System.err.println("Tank Added to add-tank: " + tank);
+
+        model.addAttribute("user", user);
+        model.addAttribute("newTank", tank);
+
+        return "add-tank.html";
+    }
+
+    @PostMapping(value = "add-tank")
+    public String addTank(@ModelAttribute("newTank") @Valid Tank tank, BindingResult result, Model model) {
+
+       User user = securityFacade.getCurrentUser();
+       
+       model.addAttribute("user", user);
+
+        if (result.hasErrors()) {
+            return "add-tank.html";
+        }
+
+        boolean validName = true;
+        try {
+            validName = tankService.getTanksForUserWithNameLike(user, tank.getName()).size() == 0;
+        } catch (NullPointerException npe) {
+            validName = false;
+        }
+
+        if (!validName) {
+            result.addError(new ObjectError("newTank", "tank already in use"));
+            return "add-tank.html";
+        }
+
+        System.err.println("Tank being Added: " + tank);
+
+        tank.setId(0);
+        userService.addTankToUser(user.getId(), tank);
+
+        return "redirect:/home";
+    }
+
+    // redirect to get the water changes for the tank
+    @RequestMapping(value = "", params = { "tankId" })
+    public String getTanksWaterChanges(@ModelAttribute("user") User user, BindingResult result) {
+
+        return "/home";
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        CustomNumberEditor editor = new CustomNumberEditor(Double.class, true) {
+            @Override
+            public void setAsText(String text) throws IllegalArgumentException {
+
+                try {
+                    super.setAsText(text);
+
+                } catch (Exception iae) {
+                    setValue(null);
+                }
+            }
+
+        };
+        binder.registerCustomEditor(Double.class, editor);
+
+        StringTrimmerEditor trimmer = new StringTrimmerEditor(true);
+        binder.registerCustomEditor(String.class, trimmer);
+    }
 }

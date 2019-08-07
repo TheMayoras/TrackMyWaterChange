@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "water_change_comments")
@@ -71,7 +72,7 @@ public class WaterChangeComment {
     }
     
     public boolean isEmpty() {
-        return this.comment.trim().isEmpty();
+        return this.comment == null || this.comment.trim().isEmpty();
     }
 
 }

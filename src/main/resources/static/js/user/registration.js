@@ -18,8 +18,9 @@ $(function () {
         if (!passwordsMatch()) {
             shakeField("#password");
             shakeField("#confirmationPassword");
+            e.preventDefault();
         }
-        e.preventDefault();
+        
     })
 });
 

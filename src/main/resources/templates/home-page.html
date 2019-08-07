@@ -15,9 +15,10 @@
 <body>
   <div class="container">
     <div class="row">
-      <div class="col-md-12">
-        <div id="welcome" class="jumbotron">
+      <div class="col-sm-12">
+        <div id="welcome" class="jumbotron bg-success text-white">
           <h1 class="display-3" th:text="'Welcome, ' + ${user?.firstName}">Hello</h1>
+          <p class="lead">See your tanks below</p>
         </div>
       </div>
     </div>
@@ -41,13 +42,13 @@
 
           <!-- Row to display if no tanks available -->
           <tr class="text-danger align-middle" th:if="${user.tanks == null || user.tanks.size() == 0}">
-            <td colspan="4" class="text-danger text-center"><span class="display-4">No Tanks</span></td>
+            <td colspan="6" class="text-danger text-center"><span class="display-4">No Tanks</span></td>
           </tr>
 
           <!-- List Tanks -->
           <tr th:each="tank : ${user?.tanks}" class="tank-row">
             <th scope="row"><a th:href="@{/tank/list/__${tank.id}__}" th:text="${tank.name}" data-toggle="tooltip" data-placement="right" title="click to see breakdown"></a></th>
-            <td th:text="${tank.size}" class="text-center"></td>
+            <td th:text="@{__${tank.size}__ __${tank.units}__}" class="text-center"></td>
             <td th:text="${tank.location}"></td>
             <td th:text="${tank.waterChanges == null ? 0 : tank.waterChanges.size()}" class="text-center"></td>
 

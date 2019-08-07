@@ -13,8 +13,8 @@ import javax.validation.Payload;
 @Documented
 @Retention(RUNTIME)
 @Target(FIELD)
-@Constraint(validatedBy=TankSizeValiator.class)
-public @interface TankSize {
+@Constraint(validatedBy=QuantityValiator.class)
+public @interface Quantity {
     public String message() default "{invalid tank size error}";
     public Class<?>[] groups() default {};
     public Class<? extends Payload>[] payload() default {};

@@ -15,15 +15,17 @@
 
 <body>
   <div class="container">
-    <div class="row">
-      <div class="jumbotron bg-success m-1 text-white">
-        <h1 class="display-4">Welcome to Track My Water Change!</h1>
-        <h4 class="lead">Please register below!</h4>
+    <div class="row justify-content-center">
+      <div class="col-sm-8">
+        <div class="jumbotron bg-success m-1 text-white">
+          <h1 class="display-4">Welcome to Track My Water Change!</h1>
+          <h4 class="lead">Please register below!</h4>
+        </div>
       </div>
     </div>
 
     <div class="row justify-content-center">
-      <div class="col-sm-12">
+      <div class="col-sm-8">
         <!-- Errors -->
         <form th:action="@{/user/register}" method="post" th:object="${newUser}">
 

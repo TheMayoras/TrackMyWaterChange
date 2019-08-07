@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import themayoras.trackmywaterchange.bean.SecurityFacade;
 import themayoras.trackmywaterchange.entity.UserCommand;
 import themayoras.trackmywaterchange.service.UserService;
 
@@ -21,50 +22,56 @@ import themayoras.trackmywaterchange.service.UserService;
 @RequestMapping("/user")
 public class UserController {
 
-	// userDao
-	@Autowired
-	private UserService userService;
-	
-	@GetMapping("/login")
-	public String getLoginPage() {
-	    return "user-forms/login.html";
-	}
+    // userDao
+    @Autowired
+    private UserService userService;
+    
+    @Autowired
+    private SecurityFacade securityFacade;
 
-	@GetMapping("/register")
-	public String getRegistrationPage(Model modelPage) {
-		modelPage.addAttribute("newUser", new UserCommand());
+    @GetMapping("/login")
+    public String getLoginPage() {
+        return "user-forms/login.html";
+    }
 
-		return "user-forms/registration.html";
-	}
+    @GetMapping("/register")
+    public String getRegistrationPage(Model modelPage) {
+        modelPage.addAttribute("newUser", new UserCommand());
 
-	@PostMapping("/register")
-	public String processRegistration(@ModelAttribute("newUser") @Valid UserCommand user, BindingResult result, Model model) {
+        return "user-forms/registration.html";
+    }
 
-		if (result.hasErrors()) {
-			return "user-forms/registration.html";
-		}
+    @PostMapping("/register")
+    public String processRegistration(@ModelAttribute("newUser") @Valid UserCommand user, BindingResult result,
+            Model model) {
 
-		// save the user
-		if (userService.findAllByUsername(user.getUsername()).size() > 0) {
-			model.addAttribute("registrationError", "username taken");
-			return "user-forms/registration.html";
-		}
+        
+        
+        if (result.hasErrors()) {
+            return "user-forms/registration.html";
+        }
 
-		userService.registerUser(user);
+        // save the user
+        if (userService.findAllByUsername(user.getUsername()).size() > 0) {
+            model.addAttribute("registrationError", "username taken");
+            return "user-forms/registration.html";
+        }
 
-		return "redirect:/user/login";
-	}
+        userService.registerUser(user);
 
-	@GetMapping("/login-expired")
-	public String getLoginExpired(Model model) {
+        return "redirect:/user/login";
+    }
 
-		return "user-forms/login-expired.html";
-	}
+    @GetMapping("/login-expired")
+    public String getLoginExpired(Model model) {
 
-	@InitBinder
-	public void initBinder(WebDataBinder binder) {
-		StringTrimmerEditor trimmer = new StringTrimmerEditor(false);
+        return "user-forms/login-expired.html";
+    }
 
-		binder.registerCustomEditor(String.class, trimmer);
-	}
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        StringTrimmerEditor trimmer = new StringTrimmerEditor(false);
+
+        binder.registerCustomEditor(String.class, trimmer);
+    }
 }
