@@ -47,14 +47,16 @@
 
           <!-- List Tanks -->
           <tr th:each="tank : ${user?.tanks}" class="tank-row">
-            <th scope="row"><a th:href="@{/tank/list/__${tank.id}__}" th:text="${tank.name}" data-toggle="tooltip" data-placement="right" title="click to see breakdown"></a></th>
+            <th scope="row"><a th:href="@{/tank/list/__${tank.id}__}" th:text="${tank.name}" data-toggle="tooltip"
+                data-placement="right" title="click to see breakdown"></a></th>
             <td th:text="@{__${tank.size}__ __${tank.units}__}" class="text-center"></td>
             <td th:text="${tank.location}"></td>
             <td th:text="${tank.waterChanges == null ? 0 : tank.waterChanges.size()}" class="text-center"></td>
 
             <!-- See Water Changes for tank -->
             <td>
-                <a th:href="@{/tank/add/waterChange/__${tank.id}__}" class="btn btn-primary btn-md btn-block" role="button">Add Water Change</a>
+              <a th:href="@{/tank/add/waterChange/__${tank.id}__}" class="btn btn-primary btn-md btn-block"
+                role="button">Add Water Change</a>
             </td>
             <td>
               <!-- Delete Tank -->
@@ -68,6 +70,9 @@
       </table>
     </div>
   </div>
+
+  <th:block th:insert="/fragments/general.html :: footer">
+  </th:block>
 </body>
 
 </html>

@@ -34,6 +34,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     //@formatter:off
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        
         auth.userDetailsService(userDetailsService);
 	
         auth.authenticationProvider(authenticationProvider());
@@ -53,6 +54,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		            .antMatchers("/home", "/home/**", "/tank", "/tank/**").hasRole("USER")
 		            .antMatchers("/admin/**").hasRole("ADMIN")
 		            .antMatchers("/user/register").permitAll()
+		            .antMatchers("/user/access-denied").permitAll()
 		        .and()
 		        .formLogin()
 		            .loginPage("/user/login")
@@ -67,13 +69,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)               
             .and()
-            .exceptionHandling().accessDeniedPage("/user-forms/access-denied.html")
+            .exceptionHandling().accessDeniedPage("/user/access-denied")
             .and()
             .userDetailsService(userDetailsService);
               
     }
-    
-    @Autowired
+   
     
 	//@formatter:on
 

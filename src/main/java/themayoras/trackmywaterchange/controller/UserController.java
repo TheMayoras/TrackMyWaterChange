@@ -25,7 +25,7 @@ public class UserController {
     // userDao
     @Autowired
     private UserService userService;
-    
+
     @Autowired
     private SecurityFacade securityFacade;
 
@@ -45,8 +45,6 @@ public class UserController {
     public String processRegistration(@ModelAttribute("newUser") @Valid UserCommand user, BindingResult result,
             Model model) {
 
-        
-        
         if (result.hasErrors()) {
             return "user-forms/registration.html";
         }
@@ -66,6 +64,11 @@ public class UserController {
     public String getLoginExpired(Model model) {
 
         return "user-forms/login-expired.html";
+    }
+
+    @GetMapping("/access-denied")
+    public String getAccessDenied() {
+        return "user-forms/access-denied.html";
     }
 
     @InitBinder
