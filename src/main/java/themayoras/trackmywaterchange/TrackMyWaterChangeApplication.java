@@ -7,7 +7,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import themayoras.trackmywaterchange.bean.CustomSiteProperties;
+import themayoras.trackmywaterchange.security.UserDetailsServiceImpl;
 
 @SpringBootApplication
 @ComponentScan
@@ -23,5 +27,14 @@ public class TrackMyWaterChangeApplication {
 	public CustomSiteProperties customSiteProperties() {
 		return new CustomSiteProperties();
 	}
-	
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	public UserDetailsService userDetailsServiceBean() {
+		return new UserDetailsServiceImpl();
+	}
 }

@@ -81,7 +81,7 @@ public class TankController {
             @PathVariable("tankId") int tankId) {
 
         if (result.hasErrors()) {
-            return "/tanks/add-water-change.html";
+            return "tanks/add-water-change.html";
         }
 
         tankService.createWaterChange(waterChange.getTank(), waterChange);

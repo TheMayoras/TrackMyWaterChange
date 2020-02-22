@@ -35,15 +35,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService);
-	
+
         auth.authenticationProvider(authenticationProvider());
-	
+
         auth.jdbcAuthentication()
             .passwordEncoder(passwordEncoder)
             .dataSource(dataSource)
 		        .usersByUsernameQuery("SELECT username, password, true from users WHERE username=?")
 		        .authoritiesByUsernameQuery("SELECT username, role FROM users_roles WHERE username=?");
-	
+
     }
 
     @Override
@@ -65,34 +65,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
             .and()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)               
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
             .and()
             .exceptionHandling().accessDeniedPage("/user-forms/access-denied.html")
             .and()
             .userDetailsService(userDetailsService);
-              
+
     }
-    
-    @Autowired
-    
+
 	//@formatter:on
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
-    @Bean
-    public UserDetailsService userDetailsServiceBean() {
-        return new UserDetailsServiceImpl();
-    }
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         final CustomAuthenticationProvider customAutheticationProvider = new CustomAuthenticationProvider(
-                userDetailsServiceBean());
+                this.userDetailsService);
         customAutheticationProvider.setUserDetailsService(this.userDetailsService);
-        customAutheticationProvider.setPasswordEncoder(passwordEncoder());
+        customAutheticationProvider.setPasswordEncoder(this.passwordEncoder);
 
         return customAutheticationProvider;
     }
