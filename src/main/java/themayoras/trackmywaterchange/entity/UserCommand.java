@@ -1,12 +1,12 @@
 package themayoras.trackmywaterchange.entity;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-
 import themayoras.trackmywaterchange.entity.validation.Email;
 import themayoras.trackmywaterchange.entity.validation.PasswordConfirmation;
 import themayoras.trackmywaterchange.entity.validation.Username;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @PasswordConfirmation(message = "passwords must match")
 public class UserCommand {
@@ -40,16 +40,16 @@ public class UserCommand {
     private String email;
 
     public UserCommand(String username, @NotBlank(message = "required") String password,
-            @NotBlank(message = "is required") String confirmationPassword,
-            @NotNull(message = "is required") @Pattern(regexp = "^[a-zA-Z]+$", message = "invalid name") String firstName,
-            @NotNull(message = "is required") @Pattern(regexp = "^[a-zA-Z]+$", message = "invalid name") String lastName,
-            String email) {
-        this.username             = username;
-        this.password             = password;
+                       @NotBlank(message = "is required") String confirmationPassword,
+                       @NotNull(message = "is required") @Pattern(regexp = "^[a-zA-Z]+$", message = "invalid name") String firstName,
+                       @NotNull(message = "is required") @Pattern(regexp = "^[a-zA-Z]+$", message = "invalid name") String lastName,
+                       String email) {
+        this.username = username;
+        this.password = password;
         this.confirmationPassword = confirmationPassword;
-        this.firstName            = firstName;
-        this.lastName             = lastName;
-        this.email                = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
     }
 
     public UserCommand() {

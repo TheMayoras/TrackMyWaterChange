@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>themayoras</groupId>
 	<artifactId>trackmywaterchange</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>trackmywaterchange</name>
 	<description>Web Project for tracking water change schedules</description>
 

@@ -2,186 +2,187 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title th:text="@{'Registration - ' + ${@customSiteProperties.siteName}}"></title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title th:text="@{'Registration - ' + ${@customSiteProperties.siteName}}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-  <th:block th:insert="fragments/scripts-css.html :: incl-jQuery"></th:block>
-  <th:block th:insert="fragments/scripts-css.html :: incl-bootstrap"></th:block>
-  <th:block th:insert="fragments/scripts-css.html :: incl-jQuery-ui"></th:block>
+    <th:block th:insert="fragments/scripts-css.html :: incl-jQuery"></th:block>
+    <th:block th:insert="fragments/scripts-css.html :: incl-bootstrap"></th:block>
+    <th:block th:insert="fragments/scripts-css.html :: incl-jQuery-ui"></th:block>
 
-  <script th:src="@{/js/user/registration.js}"></script>
+    <script th:src="@{/js/user/registration.js}"></script>
 
 </head>
 
 <body>
-  <div class="container">
+<div class="container">
     <div class="row justify-content-center">
-      <div class="col-sm-8">
-        <div class="jumbotron bg-success m-1 text-white">
-          <h1 class="display-4">Welcome to Track My Water Change!</h1>
-          <h4 class="lead">Please register below!</h4>
-        </div>
-      </div>
-    </div>
-
-    <div class="row justify-content-center">
-      <div class="col-sm-8">
-        <!-- Errors -->
-        <form th:action="@{/user/register}" method="post" th:object="${newUser}">
-
-          <div th:if="${registrationError != null}" class="alert alert-danger my-auto mb-6" role="alert">
-            <h6 th:if="${registrationError != null}" th:text="${registrationError}">Username gone!</h6>
-          </div>
-
-          <!-- Username -->
-          <div class="input-group mt-3 mb-3">
-            <div class="input-group-prepend">
-              <span id="username-label" class="input-group-text bg-success text-white">Username(*) </span>
+        <div class="col-sm-8">
+            <div class="jumbotron bg-success m-1 text-white">
+                <h1 class="display-4">Welcome to Track My Water Change!</h1>
+                <h4 class="lead">Please register below!</h4>
             </div>
+        </div>
+    </div>
 
-            <input type="text" value="Username" id="username" th:field="*{username}" placeholder="Username"
-              class="form-control" aria-label="username" aria-describedby="username-label" />
+    <div class="row justify-content-center">
+        <div class="col-sm-8">
+            <!-- Errors -->
+            <form th:action="@{/user/register}" method="post" th:object="${newUser}">
 
-            <div class="input-group-append">
+                <div th:if="${registrationError != null}" class="alert alert-danger my-auto mb-6" role="alert">
+                    <h6 th:if="${registrationError != null}" th:text="${registrationError}">Username gone!</h6>
+                </div>
+
+                <!-- Username -->
+                <div class="input-group mt-3 mb-3">
+                    <div class="input-group-prepend">
+                        <span id="username-label" class="input-group-text bg-success text-white">Username(*) </span>
+                    </div>
+
+                    <input type="text" value="Username" id="username" th:field="*{username}" placeholder="Username"
+                           class="form-control" aria-label="username" aria-describedby="username-label"/>
+
+                    <div class="input-group-append">
               <span class="input-group-text bg-danger text-white" th:if="${#fields.hasErrors('username')}"
-            th:errors="*{username}"
-          >Incorrect Username</span>
-        </div>
-      </div>
+                    th:errors="*{username}"
+              >Incorrect Username</span>
+                    </div>
+                </div>
 
-      <!-- First Name -->
-      <div class="input-group mb-2">
-        <div class="input-group-prepend">
-          <span id="first-name-label" class="input-group-text bg-success text-white">First Name(*) </span> 
-        </div>
+                <!-- First Name -->
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <span id="first-name-label" class="input-group-text bg-success text-white">First Name(*) </span>
+                    </div>
 
-        <input
-          type="text"
-          value="JimBob"
-          id="firstName"
-          th:field="*{firstName}"
-          placeholder="JimBob"
-          class="form-control"
-          aria-label="firstName"
-          aria-describedby="first-name-label"
-        /> 
-        <div class="input-group-apppend">
-        <span 
-          th:if="${#fields.hasErrors('firstName')}"
-          th:errors="*{firstName}"
-          class="input-group-text bg-danger text-white"
+                    <input
+                            type="text"
+                            value="JimBob"
+                            id="firstName"
+                            th:field="*{firstName}"
+                            placeholder="JimBob"
+                            class="form-control"
+                            aria-label="firstName"
+                            aria-describedby="first-name-label"
+                    />
+                    <div class="input-group-apppend">
+        <span
+                th:if="${#fields.hasErrors('firstName')}"
+                th:errors="*{firstName}"
+                class="input-group-text bg-danger text-white"
         >Incorrect Name</span>
-      </div>
-      </div>
+                    </div>
+                </div>
 
-      <!-- Last Name -->
-      <div class="input-group mb-2">
-        <div class="input-group-prepend">
-        <span id="last-name-label" class="input-group-text bg-success text-white">Last Name(*) </span> 
-      </div>
+                <!-- Last Name -->
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <span id="last-name-label" class="input-group-text bg-success text-white">Last Name(*) </span>
+                    </div>
 
-        <input
-          type="text"
-          value="Lastname"
-          id="lastName"
-          th:field="*{lastName}"
-          placeholder="Lastname"
-          class="form-control"
-          aria-label="lastName"
-          aria-describedby="last-name-label"
-        /> 
-        <div class="form-group-append">
+                    <input
+                            type="text"
+                            value="Lastname"
+                            id="lastName"
+                            th:field="*{lastName}"
+                            placeholder="Lastname"
+                            class="form-control"
+                            aria-label="lastName"
+                            aria-describedby="last-name-label"
+                    />
+                    <div class="form-group-append">
           <span
-          class="input-group-text bg-danger text-white"
-          th:if="${#fields.hasErrors('lastName')}"
-          th:errors="*{lastName}"
-        >Incorrect Name
-      </span> 
-      </div>
-    </div>
+                  class="input-group-text bg-danger text-white"
+                  th:if="${#fields.hasErrors('lastName')}"
+                  th:errors="*{lastName}"
+          >Incorrect Name
+      </span>
+                    </div>
+                </div>
 
 
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text bg-success text-white" id="password-label">Password (*)</span>
+                    </div>
+                    <input
+                            class="form-control"
+                            type="password"
+                            id="password"
+                            th:field="*{password}"
+                            placeholder="********************************************"
+                            aria-label="password"
+                            aria-describedby="password-label"
+                    />
 
-      <div class="input-group mb-2">
-        <div class="input-group-prepend">
-          <span class="input-group-text bg-success text-white" id="password-label">Password (*)</span>
-        </div>
-        <input
-          class="form-control"
-          type="password"
-          id="password"
-          th:field="*{password}"
-          placeholder="********************************************"
-          aria-label="password"
-          aria-describedby="password-label"
-        />
-        
-        <div class="input-group-append"><span
-          class="input-group-text bg-danger text-white"
-          th:if="${#fields.hasErrors('password')}"
-          th:errors="*{password}"
-        >Incorrect Name</span>
-        </div>
-      </div>
+                    <div class="input-group-append"><span
+                            class="input-group-text bg-danger text-white"
+                            th:if="${#fields.hasErrors('password')}"
+                            th:errors="*{password}"
+                    >Incorrect Name</span>
+                    </div>
+                </div>
 
 
-      <div class="input-group mb-2">
-        <div class="input-group-prepend">
-          <span class="input-group-text bg-success text-white" id="confirmation-password-label">Confirmation Password (*)</span>
-        </div>
-        <input
-        class="form-control"
-          type="password"
-          id="confirmationPassword"
-          th:field="*{confirmationPassword}"
-          placeholder="********************************************"
-          aria-label="confirmation-password-label"
-        />
-        
-        <div class="input-group-append">
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text bg-success text-white" id="confirmation-password-label">Confirmation Password (*)</span>
+                    </div>
+                    <input
+                            class="form-control"
+                            type="password"
+                            id="confirmationPassword"
+                            th:field="*{confirmationPassword}"
+                            placeholder="********************************************"
+                            aria-label="confirmation-password-label"
+                    />
+
+                    <div class="input-group-append">
           <span
-          class="input-group-text bg-danger text-white"
-          th:if="${#fields.hasErrors('confirmationPassword')}"
-          th:errors="*{confirmationPassword}"
-        >Incorrect Name</span>
-      </div>
-      </div>
+                  class="input-group-text bg-danger text-white"
+                  th:if="${#fields.hasErrors('confirmationPassword')}"
+                  th:errors="*{confirmationPassword}"
+          >Incorrect Name</span>
+                    </div>
+                </div>
 
 
-
-      <!-- Email (Optional) -->
-      <div class="input-group mb-2">
-        <div class="input-group-prepend">
-          <span class="input-group-text bg-success text-white text-dark" id="email-label">Email (optional)</span>
-        </div>
-        <input class="form-control" aria-label="email" aria-describedby="email-label" type="text" value="email"
-          id="email" th:field="*{email}" placeholder="email@domain.com" />
-        <div class="input-group-append">
+                <!-- Email (Optional) -->
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text bg-success text-white text-dark"
+                              id="email-label">Email (optional)</span>
+                    </div>
+                    <input class="form-control" aria-label="email" aria-describedby="email-label" type="text"
+                           value="email"
+                           id="email" th:field="*{email}" placeholder="email@domain.com"/>
+                    <div class="input-group-append">
           <span class="input-group-text bg-danger text-white" th:if="${#fields.hasErrors('email')}"
-          th:errors="*{email}"
-        >Incorrect Email</span>
-      </div>
-      </div>
+                th:errors="*{email}"
+          >Incorrect Email</span>
+                    </div>
+                </div>
 
 
-<div class="d-flex justify-content-center">
-      <button
-        type="submit"
-        name="submitForm"
-        value="0"
-        class="btn btn-primary btn-lg"
-      >Submit</button>
+                <div class="d-flex justify-content-center">
+                    <button
+                            type="submit"
+                            name="submitForm"
+                            value="0"
+                            class="btn btn-primary btn-lg"
+                    >Submit
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-    </form>
-  </div>
-  </div>
     <br>
     <p>
-      <a href="/" class="link">Return home</a>
+        <a href="/" class="link">Return home</a>
     </p>
 
-    <th:block th:replace="fragments/footer :: footer"></th:block>
-  </div>
+</div>
+<th:block th:replace="fragments/footer :: footer"></th:block>
 
 </body>
 </html>

@@ -9,7 +9,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
 import themayoras.trackmywaterchange.entity.User;
 import themayoras.trackmywaterchange.service.UserService;
 
@@ -37,7 +36,7 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
         try {
             System.err.println("Authenticating User: " + user);
             System.err.println("\tUser Password: " + user.getPassword());
-            System.err.println("\tEntered Password: " + enterredPassword);
+            System.err.println("\t\tEntered Password: " + enterredPassword);
             System.err.println("\t\tEncoded Password: " + passwordEncoder.encode(enterredPassword));
         } catch (Exception e) {
 

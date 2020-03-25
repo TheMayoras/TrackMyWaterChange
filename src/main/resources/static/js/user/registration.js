@@ -1,6 +1,6 @@
 var popoverInfo = {
-    title: 'Password Warning!',
-    content: 'I only user self-signed certificates!\nPlease do not use your normal password'
+    title: 'Now Using Let\'s Encrypt!',
+    content: 'The site now uses certificates issued by Let\'s Encrypt!\nFeel free to use whatever password!\nYour password is encrypted at rest'
 };
 
 $(function () {

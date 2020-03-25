@@ -1,10 +1,5 @@
 package themayoras.trackmywaterchange.controller;
 
-import java.text.DateFormat;
-import java.util.Date;
-
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.CustomNumberEditor;
@@ -12,19 +7,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.bind.annotation.*;
 import themayoras.trackmywaterchange.dateformat.MultiDateFormatBuilder;
 import themayoras.trackmywaterchange.entity.Tank;
+import themayoras.trackmywaterchange.entity.TankDetails;
 import themayoras.trackmywaterchange.entity.WaterChange;
 import themayoras.trackmywaterchange.entity.WaterChangeComment;
+import themayoras.trackmywaterchange.service.TankDetailsService;
 import themayoras.trackmywaterchange.service.TankService;
+
+import javax.validation.Valid;
+import java.text.DateFormat;
+import java.util.Date;
 
 @Controller
 @RequestMapping("/tank")
@@ -32,6 +26,9 @@ public class TankController {
 
     @Autowired
     private TankService tankService;
+
+    @Autowired
+    private TankDetailsService tankDetailsService;
 
     @PostMapping("/delete/{tankId}")
     public String deleteTank(@PathVariable("tankId") int id) {
@@ -51,8 +48,14 @@ public class TankController {
         return "tanks/list-tank-water-changes.html";
     }
 
+    @GetMapping("/list/{tankId}/tankDetails")
+    @ResponseBody
+    public TankDetails getDetailedInformation(@PathVariable int tankId) {
+        return tankDetailsService.getTankDetails(tankId);
+    }
+
     @GetMapping("/add/waterChange/{tankId}")
-    public String getAdddWaterChange(@PathVariable("tankId") int tankId, Model model) {
+    public String getAdddWaterChange(@PathVariable int tankId, Model model) {
         Tank tank = tankService.getTank(tankId);
 
         WaterChange newWaterChange = new WaterChange();
@@ -65,7 +68,7 @@ public class TankController {
 
     @PostMapping(path = "/add/waterChange/{tankId}", params = { "addComment" })
     public String addCommentToWaterChange(@ModelAttribute("newWaterChange") WaterChange waterChange,
-            @PathVariable("tankId") int tankId, Model model) {
+                                          @PathVariable("tankId") int tankId, Model model) {
 
 
         WaterChangeComment comment = new WaterChangeComment();
@@ -78,7 +81,7 @@ public class TankController {
 
     @PostMapping(path = "/add/waterChange/{tankId}", params = { "add" })
     public String addWaterChange(@ModelAttribute("newWaterChange") @Valid WaterChange waterChange, BindingResult result,
-            @PathVariable("tankId") int tankId) {
+                                 @PathVariable("tankId") int tankId) {
 
         if (result.hasErrors()) {
             return "tanks/add-water-change.html";
@@ -102,10 +105,10 @@ public class TankController {
     @InitBinder
     public void bindDate(WebDataBinder binder) {
         DateFormat format = MultiDateFormatBuilder.create().setOutputFormat("mm-dd-yyyy")
-                .addFormat("\\d{2}-\\d{2}-\\d{2}", "MM-dd-yy").addFormat("\\d{2}-\\d{2}-\\d{4}", "MM-dd-yyyy")
-                .addFormat("\\d{2}/\\d{2}/\\d{2}", "MM/dd/yy").addFormat("\\d{2}\\/\\d{2}\\/\\d{4}", "MM/dd/yyyy")
-                .addFormat("\\d/\\d{2}/\\d{4}", "M/dd/yyyy").addFormat("\\d/\\d{2}/\\d{2}", "M/dd/yy")
-                .addFormat("\\d/\\d{2}/\\d{4}", "M-dd-yyyy").addFormat("\\d/\\d{2}/\\d{2}", "M-dd-yy").build();
+                                                  .addFormat("\\d{2}-\\d{2}-\\d{2}", "MM-dd-yy").addFormat("\\d{2}-\\d{2}-\\d{4}", "MM-dd-yyyy")
+                                                  .addFormat("\\d{2}/\\d{2}/\\d{2}", "MM/dd/yy").addFormat("\\d{2}\\/\\d{2}\\/\\d{4}", "MM/dd/yyyy")
+                                                  .addFormat("\\d/\\d{2}/\\d{4}", "M/dd/yyyy").addFormat("\\d/\\d{2}/\\d{2}", "M/dd/yy")
+                                                  .addFormat("\\d/\\d{2}/\\d{4}", "M-dd-yyyy").addFormat("\\d/\\d{2}/\\d{2}", "M-dd-yy").build();
 
         CustomDateEditor editor = new CustomDateEditor(format, true) {
 
