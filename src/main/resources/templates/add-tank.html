@@ -2,148 +2,156 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title th:text="@{'Login - ' + ${@customSiteProperties.siteName}}"></title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title th:text="@{'Login - ' + ${@customSiteProperties.siteName}}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-  <th:block th:insert="/fragments/scripts-css.html :: incl-jQuery"></th:block>
-  <th:block th:insert="/fragments/scripts-css.html :: incl-jQuery-ui"></th:block>
-  <th:block th:insert="/fragments/scripts-css.html :: incl-bootstrap"></th:block>
+    <th:block th:insert="fragments/scripts-css.html :: incl-jQuery"></th:block>
+    <th:block th:insert="fragments/scripts-css.html :: incl-jQuery-ui"></th:block>
+    <th:block th:insert="fragments/scripts-css.html :: incl-bootstrap"></th:block>
 
 </head>
 
 <body>
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-12">
-        <div id="welcome" class="jumbotron bg-success text-white">
-          <h1 class="display-3" th:text="'Welcome, ' + ${user?.firstName}">
-            Hello
-          </h1>
-          <p class="lead">Add your tank below</p>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div id="welcome" class="jumbotron bg-success text-white">
+                    <h1 class="display-3" th:text="'Welcome, ' + ${user?.firstName}">
+                        Hello
+                    </h1>
+                    <p class="lead">Add your tank below</p>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <div class="row justify-content-center mb-5">
-      <div class="col-sm-7 text-center">
-        <form th:object="${newTank}" th:action="@{/home/add-tank}" method="POST">
+        <div class="row justify-content-center mb-5">
+            <div class="col-sm-7 text-center">
+                <form th:object="${newTank}" th:action="@{/home/add-tank}" method="POST">
 
-          <!-- Tank Name -->
-          <div class="input-group pb-2">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="tank-name-label">Tank Name</span>
-            </div>
+                    <!-- Tank Name -->
+                    <div class="input-group pb-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="tank-name-label">Tank Name</span>
+                        </div>
 
-            <input class="form-control" type="text" th:field="*{name}" placeholder="Tank Name"
-              aria-label="tank-name-label" aria-describedby="tank-name-label">
+                        <input class="form-control" type="text" th:field="*{name}" placeholder="Tank Name"
+                            aria-label="tank-name-label" aria-describedby="tank-name-label">
 
-            <div class="input-group-append" th:if="${#fields.hasErrors('name')}">
-              <span class="input-group-text bg-danger text-white" th:errors="*{name}"></span>
-            </div>
-          </div>
-
-          <div class="row pb-2">
-            <div class="col pr-0">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="size-label">Size</span>
+                        <div class="input-group-append" th:if="${#fields.hasErrors('name')}">
+                        <span class="input-group-text bg-danger text-white" th:errors="*{name}"></span>
+                    </div>
                 </div>
 
-                <input class="form-control" type="text" placeholder="Size" aria-label="size"
-                  aria-describedby="size-label" th:field="*{size}" />
+                <div class="row pb-2">
+                    <div class="col pr-0">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="size-label">Size</span>
+                            </div>
 
-                <select id="units" class="form-control" th:field="*{units}">
-                  <option th:each="unit : ${T(themayoras.trackmywaterchange.entity.QuantityUnits).values()}"
-                    th:text="${unit}" th:value="${{unit}}"></option>
-                </select>
+                            <input class="form-control" type="text" placeholder="Size" aria-label="size"
+                                   aria-describedby="size-label" th:field="*{size}"/>
 
-                <div class="input-group-append" th:if="${#fields.hasErrors('size')}">
-              <span class="input-group-text bg-danger text-white" th:errors="*{size}"></span>
-            </div>
-          </div>
-          </div>
-          </div>
+                            <select id="units" class="form-control" th:field="*{units}">
+                                <option th:each="unit : ${T(themayoras.trackmywaterchange.entity.QuantityUnits).values()}"
+                                        th:text="${unit}" th:value="${{unit}}"></option>
+                            </select>
 
-          <div class="input-group pb-2">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="location-label">Location</span>
-            </div>
+                            <div class="input-group-append" th:if="${#fields.hasErrors('size')}">
+                                <span class="input-group-text bg-danger text-white" th:errors="*{size}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <input class="form-control" type="text" placeholder="Location" aria-label="location" aria-describedby="location-label" th:field="*{location}">
+                <div class="input-group pb-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="location-label">Location</span>
+                    </div>
 
-            <div class="input-group-append" th:if="${#fields.hasErrors('location')}">
-              <span class="input-group-text bg-danger text-white" th:errors="*{location}"></span>
-            </div>
-          </div>
-        <!-- </div>
-            <div class="col form-group pl-0">
-              
-            </div>
-        </div> -->
+                    <input class="form-control" type="text" placeholder="Location" aria-label="location"
+                           aria-describedby="location-label" th:field="*{location}">
 
-        <button type="submit" class="btn btn-success btn-lg">Submit</button>
-        </form>
-      </div>
-      <div class="col-sm-3">
-        <div class="card">
-          <div class="card-body bg-secondary text-light">
-            <h5 class="card-title">Here by mistake?</h5>
-            <p class="card-text">Return <a href="/home" class="btn btn-danger">home</a></p>
-          </div>
+                    <div class="input-group-append" th:if="${#fields.hasErrors('location')}">
+                        <span class="input-group-text bg-danger text-white" th:errors="*{location}"></span>
+                    </div>
+                </div>
+                <!-- </div>
+                    <div class="col form-group pl-0">
+
+                    </div>
+                </div> -->
+
+                <button type="submit" class="btn btn-success btn-lg">Submit</button>
+            </form>
         </div>
-      </div>
+        <div class="col-sm-3">
+            <div class="card">
+                <div class="card-body bg-secondary text-light">
+                    <h5 class="card-title">Here by mistake?</h5>
+                    <p class="card-text">Return <a href="/home" class="btn btn-danger">home</a></p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="row">
-      <div class="col-sm-12">
-      <table class="table table-striped table-hover">
-        <thead class="thead-dark">
-          <tr class="pb-2">
-            <th scope="col">Name</th>
-            <th scope="col" class="text-center">Size</th>
-            <th scope="col">Location</th>
-            <th scope="col" id="water-change-col" class="text-center">Water Change Count</th>
-            <th class="pl-3" scope="col" colspan="2">
-              <form th:action="@{/home/add-tank}" method="GET" id="add-tank">
-                <button type="submit" class="btn btn-outline-info btn-md btn-block disabled" disabled>Add Tank</button>
-              </form>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
+        <div class="col-sm-12">
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
+                <tr class="pb-2">
+                    <th scope="col">Name</th>
+                    <th scope="col" class="text-center">Size</th>
+                    <th scope="col">Location</th>
+                    <th scope="col" id="water-change-col" class="text-center">Water Change Count</th>
+                    <th class="pl-3" scope="col" colspan="2">
+                        <form th:action="@{/home/add-tank}" method="GET" id="add-tank">
+                            <button type="submit" class="btn btn-outline-info btn-md btn-block disabled" disabled>Add
+                                Tank
+                            </button>
+                        </form>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
 
-          <!-- Row to display if no tanks available -->
-          <tr class="text-danger align-middle" th:if="${user.tanks == null || user.tanks.size() == 0}">
-            <td colspan="6" class="text-danger text-center"><span class="display-4">No Tanks</span></td>
-          </tr>
+                <!-- Row to display if no tanks available -->
+                <tr class="text-danger align-middle" th:if="${user.tanks == null || user.tanks.size() == 0}">
+                    <td colspan="6" class="text-danger text-center"><span class="display-4">No Tanks</span></td>
+                </tr>
 
-          <!-- List Tanks -->
-          <tr th:each="tank : ${user?.tanks}" class="tank-row">
-            <th scope="row"><a th:href="@{/tank/list/__${tank.id}__}" th:text="${tank.name}" data-toggle="tooltip"
-                data-placement="right" title="click to see breakdown"></a></th>
-            <td th:text="@{__${tank.size}__ __${tank.units}__}" class="text-center"></td>
-            <td th:text="${tank.location}"></td>
-            <td th:text="${tank.waterChanges == null ? 0 : tank.waterChanges.size()}" class="text-center"></td>
+                <!-- List Tanks -->
+                <tr th:each="tank : ${user?.tanks}" class="tank-row">
+                    <th scope="row"><a th:href="@{/tank/list/__${tank.id}__}" th:text="${tank.name}"
+                                       data-toggle="tooltip"
+                                       data-placement="right" title="click to see breakdown"></a></th>
+                    <td th:text="@{__${tank.size}__ __${tank.units}__}" class="text-center"></td>
+                    <td th:text="${tank.location}"></td>
+                    <td th:text="${tank.waterChanges == null ? 0 : tank.waterChanges.size()}" class="text-center"></td>
 
-            <!-- See Water Changes for tank -->
-            <td>
-              <a th:href="@{/tank/add/waterChange/__${tank.id}__}"
-                class="btn btn-outline-primary btn-md btn-block disabled" role="button" disabled>Add Water Change</a>
-            </td>
-            <td>
-              <!-- Delete Tank -->
-              <form th:object="${user}" th:action="@{/tank/delete/__${tank.id}__}" method="POST">
-                <button type="submit" class="btn btn-outline-danger btn-md btn-block disabled" disabled>Delete
-                  Tank</button>
-              </form>
-            </td>
-          </tr>
+                    <!-- See Water Changes for tank -->
+                    <td>
+                        <a th:href="@{/tank/add/waterChange/__${tank.id}__}"
+                           class="btn btn-outline-primary btn-md btn-block disabled" role="button" disabled>Add Water
+                            Change</a>
+                    </td>
+                    <td>
+                        <!-- Delete Tank -->
+                        <form th:object="${user}" th:action="@{/tank/delete/__${tank.id}__}" method="POST">
+                            <button type="submit" class="btn btn-outline-danger btn-md btn-block disabled" disabled>
+                                Delete
+                                Tank
+                            </button>
+                        </form>
+                    </td>
+                </tr>
 
-        </tbody>
-      </table>
+                </tbody>
+            </table>
+        </div>
     </div>
-  </div>
-  </div>
+</div>
+<th:block th:replace="fragments/footer :: footer"></th:block>
 
   <th:block th:insert="/fragments/general.html :: footer">
   </th:block>

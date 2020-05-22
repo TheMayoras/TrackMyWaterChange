@@ -1,22 +1,20 @@
 package themayoras.trackmywaterchange.controller;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.*;
 import themayoras.trackmywaterchange.bean.SecurityFacade;
+import themayoras.trackmywaterchange.entity.User;
 import themayoras.trackmywaterchange.entity.UserCommand;
 import themayoras.trackmywaterchange.service.UserService;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/user")
@@ -30,7 +28,7 @@ public class UserController {
     private SecurityFacade securityFacade;
 
     @GetMapping("/login")
-    public String getLoginPage() {
+    public String getLoginPage(HttpServletRequest request) {
         return "user-forms/login.html";
     }
 
@@ -43,7 +41,7 @@ public class UserController {
 
     @PostMapping("/register")
     public String processRegistration(@ModelAttribute("newUser") @Valid UserCommand user, BindingResult result,
-            Model model) {
+                                      Model model, HttpServletRequest request) {
 
         if (result.hasErrors()) {
             return "user-forms/registration.html";
@@ -54,9 +52,15 @@ public class UserController {
             model.addAttribute("registrationError", "username taken");
             return "user-forms/registration.html";
         }
+        String password = user.getPassword();
 
-        userService.registerUser(user);
-
+        User registered = userService.registerUser(user);
+        try {
+            request.login(registered.getUsername(), password);
+            return "redirect:/home";
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
         return "redirect:/user/login";
     }
 
