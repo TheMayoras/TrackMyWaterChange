@@ -1,12 +1,14 @@
 "use strict";
 
-app.config([
-  "$routeProvider",
-  function config($routeProvider) {
-    $routeProvider
-      .otherwise({
-        template: "<index></index>"
-      });
-  },
-]);
+angular
+    .module('app')
+    .config([ "$routeProvider",
+          function config($routeProvider) {
+            $routeProvider
+                .when('/', {
+                    template: "<index></index>"
+                })
+                .otherwise("/");
+          },
+    ]);
 

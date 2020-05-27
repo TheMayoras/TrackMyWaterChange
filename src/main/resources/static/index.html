@@ -30,15 +30,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-route/1.7.9/angular-route.min.js"></script>
 
     <!-- user scripts -->
-    <script src="app/app.js"></script>
-    <script src="app/home/home.module.js"></script>
-    <script src="app/home/home.component.js"></script>
+    <script src="app/app.module.js"></script>
+    <script src="app/app.config.js"></script>
     <script src="app/index/index.module.js"></script>
     <script src="app/index/index.component.js"></script>
 </head>
 
 <body>
-<div data-ng-view></div>
+<div data-ng-view data-ng-app="app"></div>
 
 <!-- footer -->
 <div class="row justify-content-between bg-light mt-3">
