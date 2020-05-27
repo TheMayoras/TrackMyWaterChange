@@ -9,8 +9,24 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class TomcatConfiguration {
-    @Value("${server.http.port}")
+
+    @Value("${server.port.http}")
     private int httpPort;
+
+    @Value("${server.port}")
+    private int httpsPort;
+
+    @Bean
+    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> containerCustomizer() {
+        return factory -> {
+            Connector connector = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
+            connector.setScheme("http");
+            connector.setPort(httpPort);
+            connector.setRedirectPort(httpsPort);
+            connector.setSecure(false);
+            factory.addAdditionalTomcatConnectors(connector);
+        };
+    }
 
     public int getHttpPort() {
         return httpPort;
@@ -20,13 +36,11 @@ public class TomcatConfiguration {
         this.httpPort = httpPort;
     }
 
+    public int getHttpsPort() {
+        return httpsPort;
+    }
 
-    @Bean
-    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> containerCustomizer() {
-        return factory -> {
-            Connector connector = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
-            connector.setPort(httpPort);
-            factory.addAdditionalTomcatConnectors(connector);
-        };
+    public void setHttpsPort(int httpsPort) {
+        this.httpsPort = httpsPort;
     }
 }

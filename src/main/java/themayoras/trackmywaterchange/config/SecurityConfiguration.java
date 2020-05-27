@@ -73,7 +73,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
             .and()
-                .requiresChannel().antMatchers("/*/**").requiresSecure() // match anything that is not home
+                .requiresChannel().antMatchers("/**").requiresSecure()
             .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).maximumSessions(1)
                 .and()
