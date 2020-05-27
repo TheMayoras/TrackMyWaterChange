@@ -1,8 +1,9 @@
-package themayoras.trackmywaterchange;
+package themayoras.trackmywaterchange.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 import javax.sql.DataSource;
 
@@ -46,13 +48,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		        .authoritiesByUsernameQuery("SELECT username, role FROM users_roles WHERE username=?");
 
     }
+    //@formatter:on
 
-    // @autoformatter:off
+    // @formatter:off
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-		            .antMatchers("/home", "/home/**", "/tank", "/tank/**").hasRole("USER")
+		            .antMatchers("/home", "/home/**", "/tank", "/tank/**", "/current-user").hasRole("USER")
 		            .antMatchers("/admin/**").hasRole("ADMIN")
 		            .antMatchers("/user/register").permitAll()
 		            .antMatchers("/user/access-denied").permitAll()
@@ -72,12 +75,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .and()
                 .requiresChannel().antMatchers("/*/**").requiresSecure() // match anything that is not home
             .and()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).maximumSessions(1)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).maximumSessions(1)
                 .and()
             .and()
-            .exceptionHandling().accessDeniedPage("/user/access-denied")
+                .exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
             .and()
-            .userDetailsService(userDetailsService);
+                .exceptionHandling().accessDeniedPage("/user/access-denied")
+            .and()
+                .userDetailsService(userDetailsService);
 
     }
     // @autoformatter:on
