@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html lang="en" data-ng-app="app">
+
+<head>
+    <title>Track My Water Change</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <!-- scripts for bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"
+    ></script>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"
+    ></script>
+    <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"
+    ></script>
+
+    <!-- scripts for angular -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.9/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-route/1.7.9/angular-route.min.js"></script>
+
+    <!-- user scripts -->
+    <script src="app/app.js"></script>
+    <script src="app/home/home.module.js"></script>
+    <script src="app/home/home.component.js"></script>
+    <script src="app/index/index.module.js"></script>
+    <script src="app/index/index.component.js"></script>
+</head>
+
+<body>
+<div data-ng-view></div>
+
+<!-- footer -->
+<div class="row justify-content-between bg-light mt-3">
+    <!-- left -->
+    <div class="col-sm-4 pl-5 ml-5 py-5 w-50">
+        <p>Built using:</p>
+        <ul class="list-group list-group flush bg-light">
+            <li class="list-group-item">Spring Boot</li>
+            <li class="list-group-item">Hibernate</li>
+            <li class="list-group-item">MySQL</li>
+            <li class="list-group-item">Bootstrap</li>
+            <li class="list-group-item"><i>Sprinkle</i> of JQuery</li>
+        </ul>
+    </div>
+    <!-- center -->
+    <div class="col-sm-4 text-right pr-5 mr-5 py-5">
+        Issues? Improvements? <br>Email me at <a href="mailto:ben.mayoras@gmail.com">ben.mayoras@gmail.com</a>
+    </div>
+</div>
+</body>
+
+
+</html>
