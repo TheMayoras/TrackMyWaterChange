@@ -23,7 +23,6 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
 
     @Autowired
     public CustomAuthenticationProvider(UserDetailsService userDetails) {
-        System.err.println("Setting User Details Service");
         super.setUserDetailsService(userDetails);
     }
 
@@ -31,17 +30,13 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         User user = userService.findByUsername(authentication.getName());
 
-        String enterredPassword = authentication.getCredentials().toString();
+        String enteredPassword = authentication.getCredentials().toString();
 
         try {
             System.err.println("Authenticating User: " + user);
-            System.err.println("\tUser Password: " + user.getPassword());
-            System.err.println("\t\tEntered Password: " + enterredPassword);
-            System.err.println("\t\tEncoded Password: " + passwordEncoder.encode(enterredPassword));
-        } catch (Exception e) {
+        } catch (Exception ignored) { }
 
-        }
-        if (user == null || !passwordMatch(user, enterredPassword)) {
+        if (user == null || !passwordMatch(user, enteredPassword)) {
             throw new BadCredentialsException("Invalid Username or Password");
         }
 
@@ -50,9 +45,9 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
         return new UsernamePasswordAuthenticationToken(user, auth.getCredentials(), auth.getAuthorities());
     }
 
-    private boolean passwordMatch(User user, String enterredPassword) {
+    private boolean passwordMatch(User user, String enteredPassword) {
         try {
-            return passwordEncoder.encode(enterredPassword).equals(user.getPassword());
+            return passwordEncoder.encode(enteredPassword).equals(user.getPassword());
         } catch (NullPointerException npe) {
             return false;
         }
