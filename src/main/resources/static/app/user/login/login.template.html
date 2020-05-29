@@ -1,0 +1,84 @@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="jumbotron text-success">
+            <h1 class="display-4">Please Login Below</h1>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+
+        <form name="loginForm">
+            <!-- shows if an error was returned by the server -->
+            <div class="alert alert-danger" role="alert" data-ng-show="error">
+              <h6>{{ error }}</h6>
+            </div>
+
+            <!-- username -->
+            <div class="input-group mb-2">
+              <div class="input-group-prepend">
+                  <span class="input-group-text bg-success text-white" id="username-input-label">
+                    Username
+                  </span>
+              </div>
+
+                <input type="text" id="username" name="username" placeholder="Username" 
+                  class="form-control" aria-label="Username" 
+                  aria-describedby="username-input-label"
+                  data-ng-model="user.username"/>
+
+                <!-- a username wasn't enterred -->
+                <div class="input-group-append"
+                    data-ng-show="loginForm.username.$touched && !user.username">
+                  <span class="input-group-text bg-danger text-white">Username is required</span>
+                </div>
+              </div>
+
+
+            <!-- Password -->
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text bg-success text-white" 
+                      id="password-input-label">
+                        Password
+                    </span>
+                </div>
+
+                <input type="password" name="password" id="password" placeholder="*******************"
+                       class="form-control"
+                       aria-label="Password" aria-describedby="password-input-label"
+                       data-ng-model="user.password"/>
+
+                <!-- a password wasn't enterred -->
+                <div class="input-group-append"
+                    data-ng-show="loginForm.password.$touched && !user.password">
+                  <span class="input-group-text bg-danger text-white">Password is required</span>
+                </div>
+
+            </div>
+
+            <div class="d-flex justify-content-center">
+                <button type="submit" name="login" class="btn btn-success btn-lg"
+                  data-ng-click="attemptAuthentication(loginForm, user)">Log In</button>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="row justify-content-center">
+
+        <div class="col-sm-4">
+            <div class="d-flex justify-content-center">
+                <p>
+                    Not registered? <a data-ng-href="/user/register" class="btn btn-link">Click here</a>
+                </p>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="d-flex justify-content-center">
+                <p>
+                    <a data-ng-href="/" class="btn btn-link">Return home</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
