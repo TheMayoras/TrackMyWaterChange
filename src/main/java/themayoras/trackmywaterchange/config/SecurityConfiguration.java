@@ -72,6 +72,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		            .antMatchers("/user/access-denied").permitAll()
                     .antMatchers("/").permitAll()
                     .antMatchers("/app/**").permitAll()
+                    .antMatchers("/favicon.*").permitAll()
                     .anyRequest().authenticated()
             .and()
             .headers()
