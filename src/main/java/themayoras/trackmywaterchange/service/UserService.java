@@ -25,5 +25,4 @@ public interface UserService {
 	List<Tank> getAllTanksByUserId(int id);
 
 	void addTankToUser(int id, Tank tank);
-	
 }

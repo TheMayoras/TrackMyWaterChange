@@ -1,16 +1,15 @@
 package themayoras.trackmywaterchange.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import themayoras.trackmywaterchange.dao.UserDao;
 import themayoras.trackmywaterchange.entity.Role;
 import themayoras.trackmywaterchange.entity.Tank;
 import themayoras.trackmywaterchange.entity.User;
 import themayoras.trackmywaterchange.entity.UserCommand;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -55,13 +54,10 @@ public class UserServiceImpl implements UserService {
 
     public User registerUser(UserCommand user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
         Role userRole = roleService.getRoleByName("USER");
 
         User newUser = user.getUser();
-
         newUser.addRole(userRole);
-
         return userDao.save(newUser);
     }
 
